@@ -1,8 +1,3 @@
-Deprecated
-==========
-
-This project is no longer actively maintained, please find one of the populate forks. Thanks!
-
 AvalancheImagineBundle
 ======================
 
@@ -34,7 +29,7 @@ Add AvalancheImagineBundle in your composer.json:
 ```js
 {
     "require": {
-        "avalanche123/imagine-bundle": "v2.1"
+        "snpy/imagine-bundle": "~2.1"
     }
 }
 ```
@@ -42,10 +37,10 @@ Add AvalancheImagineBundle in your composer.json:
 Now tell composer to download the bundle by running the command:
 
 ``` bash
-$ php composer.phar update avalanche123/imagine-bundle
+$ php composer.phar update snpy/imagine-bundle
 ```
 
-Composer will install the bundle to your project's `vendor/avalanche123/imagine-bundle` directory.
+Composer will install the bundle to your project's `vendor/snpy/imagine-bundle` directory.
 
 ### Step 2: Enable the bundle
 
