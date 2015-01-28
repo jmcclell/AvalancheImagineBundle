@@ -33,8 +33,8 @@ class ImagineExtension extends Twig_Extension
     /**
      * Gets cache path of an image to be filtered
      *
-     * @param string $path
-     * @param string $filter
+     * @param string  $path
+     * @param string  $filter
      * @param boolean $absolute
      *
      * @return string

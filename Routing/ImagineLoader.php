@@ -2,9 +2,9 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Routing;
 
+use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Config\Loader\Loader;
 
 class ImagineLoader extends Loader
 {
@@ -31,14 +31,14 @@ class ImagineLoader extends Loader
         if (count($this->filters) > 0) {
             foreach ($this->filters as $filter => $options) {
                 if (isset($options['path'])) {
-                    $pattern = '/'.trim($options['path'], '/').'/{path}';
+                    $pattern = '/' . trim($options['path'], '/') . '/{path}';
                 } else {
-                    $pattern = '/'.trim($this->cachePrefix, '/').'/{filter}/{path}';
+                    $pattern = '/' . trim($this->cachePrefix, '/') . '/{filter}/{path}';
                 }
 
-                $routes->add('_imagine_'.$filter, new Route(
+                $routes->add('_imagine_' . $filter, new Route(
                     $pattern,
-                    array_merge( $defaults, array('filter' => $filter)),
+                    array_merge($defaults, array('filter' => $filter)),
                     $requirements
                 ));
             }

@@ -50,8 +50,7 @@ class PasteFilterLoaderTest extends PHPUnit_Framework_TestCase
         $imagine
             ->expects($this->once())
             ->method('open')
-            ->will($this->returnValue($this->createImageMock()))
-        ;
+            ->will($this->returnValue($this->createImageMock()));
 
         $loader = new PasteFilterLoader($imagine);
 

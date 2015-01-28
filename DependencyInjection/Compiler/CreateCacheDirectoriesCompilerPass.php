@@ -16,15 +16,15 @@ class CreateCacheDirectoriesCompilerPass implements CompilerPassInterface
 
         foreach ($filters as $filter => $options) {
             if (isset($options['path'])) {
-                $dir = $webRoot.'/'.$options['path'];
+                $dir = $webRoot . '/' . $options['path'];
             } else {
-                $dir = $webRoot.'/'.$cachePrefix.'/'.$filter;
+                $dir = $webRoot . '/' . $cachePrefix . '/' . $filter;
             }
 
             if (!is_dir($dir)) {
                 if (!mkdir($dir, 0777, true)) {
                     throw new RuntimeException(sprintf(
-                        'Could not create directory for caching processed '.
+                        'Could not create directory for caching processed ' .
                         'images in "%s"', $dir
                     ));
                 }

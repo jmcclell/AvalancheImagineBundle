@@ -29,8 +29,8 @@ class PasteFilter implements FilterInterface
         $this->throwIfPointNotValid($y, 'y', array('top', 'bottom', 'middle'));
 
         $this->pasteImage = $pasteImage;
-        $this->x = $x;
-        $this->y = $y;
+        $this->x          = $x;
+        $this->y          = $y;
     }
 
     /**
@@ -91,8 +91,8 @@ class PasteFilter implements FilterInterface
 
     /**
      * @param integer|string $point
-     * @param string $pointName
-     * @param array $allowedStringValues
+     * @param string         $pointName
+     * @param array          $allowedStringValues
      *
      * @throws InvalidArgumentException
      */

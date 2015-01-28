@@ -14,9 +14,9 @@ class FilterManager
 
     public function __construct(array $filters = array())
     {
-        $this->filters   = $filters;
-        $this->loaders   = array();
-        $this->services  = array();
+        $this->filters  = $filters;
+        $this->loaders  = array();
+        $this->services = array();
     }
 
     public function addLoader($name, LoaderInterface $loader)
@@ -74,13 +74,15 @@ class FilterManager
         return $this->getLoader($options['type'])->load($options['options']);
     }
 
-    public function getOption($filter, $name, $default = null) {
-        
+    public function getOption($filter, $name, $default = null)
+    {
+
         $options = $this->filters[$filter];
-        
-        if($options && isset($options["options"]) && isset($options["options"][$name])) 
+
+        if ($options && isset($options["options"]) && isset($options["options"][$name])) {
             return $options["options"][$name];
-        
+        }
+
         return $default;
     }
 }

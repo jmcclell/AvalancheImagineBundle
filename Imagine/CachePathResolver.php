@@ -42,7 +42,7 @@ class CachePathResolver
     {
         // identify if current path is not under specified web root and return
         // unmodified path in that case
-        $realPath = realpath($this->webRoot.$path);
+        $realPath = realpath($this->webRoot . $path);
 
         if (!0 === strpos($realPath, $this->webRoot)) {
             return $path;
@@ -51,12 +51,12 @@ class CachePathResolver
         $path = str_replace(
             urlencode(ltrim($path, '/')),
             urldecode(ltrim($path, '/')),
-            $this->router->generate('_imagine_'.$filter, array(
+            $this->router->generate('_imagine_' . $filter, array(
                 'path' => ltrim($path, '/')
             ), $absolute)
         );
-        
-        $cached = realpath($this->webRoot.$path);
+
+        $cached = realpath($this->webRoot . $path);
 
         if (file_exists($cached) && !is_dir($cached) && filemtime($realPath) > filemtime($cached)) {
             unlink($cached);

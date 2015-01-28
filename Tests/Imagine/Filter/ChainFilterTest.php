@@ -36,16 +36,14 @@ class ChainFilterTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('apply')
             ->with($image)
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
         $filter2 = $this->createFilterMock();
         $filter2
             ->expects($this->once())
             ->method('apply')
             ->with($image)
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
         $chainFilter = new ChainFilter(array(
             $filter1,

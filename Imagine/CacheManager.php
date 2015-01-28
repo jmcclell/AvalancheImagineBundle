@@ -28,8 +28,7 @@ class CacheManager
         $webRoot,
         $sourceRoot,
         $permissions
-    )
-    {
+    ) {
         $this->cachePathResolver = $cachePathResolver;
         $this->imagine           = $imagine;
         $this->filterManager     = $filterManager;
@@ -52,24 +51,24 @@ class CacheManager
      */
     public function cacheImage($basePath, $path, $filter)
     {
-        $path = '/'.ltrim($path, '/');
+        $path = '/' . ltrim($path, '/');
 
         //TODO: find out why I need double urldecode to get a valid path
         $browserPath = urldecode(urldecode($this->cachePathResolver->getBrowserPath($path, $filter)));
 
         if (!empty($basePath) && 0 === strpos($browserPath, $basePath)) {
-             $browserPath = substr($browserPath, strlen($basePath));
+            $browserPath = substr($browserPath, strlen($basePath));
         }
 
-         // if cache path cannot be determined, return 404
+        // if cache path cannot be determined, return 404
         if (null === $browserPath) {
             return null;
         }
 
-        $realPath = $this->webRoot.$browserPath;
-        
+        $realPath = $this->webRoot . $browserPath;
+
         $sourcePathRoot = $this->filterManager->getOption($filter, "source_root", $this->sourceRoot);
-        $sourcePath = $sourcePathRoot.$path;
+        $sourcePath     = $sourcePathRoot . $path;
 
         // if the file has already been cached, just return path
         if (is_file($realPath)) {
@@ -102,21 +101,19 @@ class CacheManager
             ->save($realPath, array(
                 'quality' => $this->filterManager->getOption($filter, "quality", 100),
                 'format'  => $this->filterManager->getOption($filter, "format", null)
-            ))
-        ;
-        
+            ));
+
         try {
-            if (!chmod($realPath, $this->permissions))
-            {
+            if (!chmod($realPath, $this->permissions)) {
                 throw new RuntimeException(sprintf(
                     'Could not set permissions %s on image saved in %s', $this->permissions, $realPath
                 ));
             }
-            
+
         } catch (RuntimeException $e) {
             throw $e;
         }
-        
+
         return $realPath;
     }
 }

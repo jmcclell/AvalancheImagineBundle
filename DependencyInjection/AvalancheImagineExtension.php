@@ -16,7 +16,7 @@ class AvalancheImagineExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('imagine.xml');
 
         $config = $this->mergeConfig($configs);
@@ -31,11 +31,11 @@ class AvalancheImagineExtension extends Extension
             throw new InvalidArgumentException('Invalid imagine driver specified');
         }
 
-        $container->setAlias('imagine', new Alias('imagine.'.$driver));
+        $container->setAlias('imagine', new Alias('imagine.' . $driver));
 
         foreach (array('cache_prefix', 'web_root', 'source_root', 'filters') as $key) {
             if (isset($config[$key])) {
-                $container->setParameter('imagine.'.$key, $config[$key]);
+                $container->setParameter('imagine.' . $key, $config[$key]);
             }
         }
     }

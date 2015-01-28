@@ -1,8 +1,8 @@
 <?php
 namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader;
 
-use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\ChainFilter;
+use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
 use InvalidArgumentException;
 
 class ChainFilterLoader implements LoaderInterface

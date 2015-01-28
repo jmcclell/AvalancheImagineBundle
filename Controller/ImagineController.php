@@ -45,8 +45,8 @@ class ImagineController
      */
     public function __construct(ImagineInterface $imagine, CacheManager $cacheManager, FilterManager $filterManager)
     {
-        $this->imagine = $imagine;
-        $this->cacheManager = $cacheManager;
+        $this->imagine       = $imagine;
+        $this->cacheManager  = $cacheManager;
         $this->filterManager = $filterManager;
     }
 
@@ -66,15 +66,15 @@ class ImagineController
         } catch (RouteNotFoundException $e) {
             throw new NotFoundHttpException('Filter doesn\'t exist.');
         }
-        
-         // if cache path cannot be determined, return 404
+
+        // if cache path cannot be determined, return 404
         if (null === $cachedPath) {
             throw new NotFoundHttpException('Image doesn\'t exist');
         }
 
         ob_start();
         try {
-            $format  = $this->filterManager->getOption($filter, "format", "png");
+            $format = $this->filterManager->getOption($filter, "format", "png");
 
             $this->imagine->open($cachedPath)->show($format);
 
@@ -96,9 +96,9 @@ class ImagineController
 
             ($cacheType === "public") ? $response->setPublic() : $response->setPrivate();
 
-            $cacheExpires = $this->filterManager->getOption($filter, "cache_expires", "1 day");
+            $cacheExpires   = $this->filterManager->getOption($filter, "cache_expires", "1 day");
             $expirationDate = new DateTime("+" . $cacheExpires);
-            $maxAge = $expirationDate->format("U") - time();
+            $maxAge         = $expirationDate->format("U") - time();
 
             if ($maxAge < 0) {
                 throw new InvalidArgumentException("Invalid cache expiration date");
@@ -114,13 +114,13 @@ class ImagineController
         }
     }
 
-	/**
-	 * Set the request
-	 *
-	 * @param Request $request
-	 */
-	public function setRequest(Request $request = null)
-	{
-		$this->request = $request;
-	}
+    /**
+     * Set the request
+     *
+     * @param Request $request
+     */
+    public function setRequest(Request $request = null)
+    {
+        $this->request = $request;
+    }
 }

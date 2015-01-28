@@ -2,9 +2,9 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader;
 
+use Imagine\Filter\Basic\Thumbnail;
 use Imagine\Image\Box;
 use Imagine\Image\ManipulatorInterface;
-use Imagine\Filter\Basic\Thumbnail;
 
 class ThumbnailFilterLoader implements LoaderInterface
 {
