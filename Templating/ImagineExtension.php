@@ -3,7 +3,6 @@
 namespace Avalanche\Bundle\ImagineBundle\Templating;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
-use Symfony\Component\Filesystem\Filesystem;
 use Twig_Extension;
 use Twig_Filter_Method;
 
