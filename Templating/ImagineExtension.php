@@ -4,7 +4,7 @@ namespace Avalanche\Bundle\ImagineBundle\Templating;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
 use Twig_Extension;
-use Twig_Filter_Method;
+use Twig_SimpleFilter;
 
 class ImagineExtension extends Twig_Extension
 {
@@ -24,9 +24,9 @@ class ImagineExtension extends Twig_Extension
      */
     public function getFilters()
     {
-        return array(
-            'apply_filter' => new Twig_Filter_Method($this, 'applyFilter'),
-        );
+        return [
+            new Twig_SimpleFilter('apply_filter', [$this, 'applyFilter']),
+        ];
     }
 
     /**
