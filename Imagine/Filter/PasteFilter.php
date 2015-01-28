@@ -4,11 +4,12 @@ namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter;
 use Imagine\Filter\FilterInterface;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
+use InvalidArgumentException;
 
 class PasteFilter implements FilterInterface
 {
     /**
-     * @var \Imagine\Image\ImageInterface
+     * @var ImageInterface
      */
     protected $pasteImage;
 
@@ -22,9 +23,6 @@ class PasteFilter implements FilterInterface
      */
     protected $y;
 
-    /**
-     * @param \Imagine\Image\ImageInterface $pasteImage
-     */
     public function __construct(ImageInterface $pasteImage, $x, $y)
     {
         $this->throwIfPointNotValid($x, 'x', array('left', 'right', 'center'));
@@ -42,21 +40,19 @@ class PasteFilter implements FilterInterface
     {
         $x = is_string($this->x)
             ? $this->stringXtoInteger($this->x, $this->pasteImage, $image)
-            : $this->x
-        ;
+            : $this->x;
 
         $y = is_string($this->y)
             ? $this->stringYtoInteger($this->y, $this->pasteImage, $image)
-            : $this->y
-        ;
+            : $this->y;
 
         return $image->paste($this->pasteImage, new Point($x, $y));
     }
 
     /**
-     * @param string $point
-     * @param \Imagine\Image\ImageInterface $pasteImage
-     * @param \Imagine\Image\ImageInterface $image
+     * @param string         $point
+     * @param ImageInterface $pasteImage
+     * @param ImageInterface $image
      *
      * @return integer
      */
@@ -64,9 +60,9 @@ class PasteFilter implements FilterInterface
     {
         switch ($point) {
             case 'right':
-                return (integer) $image->getSize()->getWidth() - $pasteImage->getSize()->getWidth();
+                return (int) $image->getSize()->getWidth() - $pasteImage->getSize()->getWidth();
             case 'center':
-                return (integer) round( ($image->getSize()->getWidth() / 2) - ($pasteImage->getSize()->getWidth() / 2) );
+                return (int) round(($image->getSize()->getWidth() / 2) - ($pasteImage->getSize()->getWidth() / 2));
             case 'left':
             default:
                 return 0;
@@ -74,9 +70,9 @@ class PasteFilter implements FilterInterface
     }
 
     /**
-     * @param string $point
-     * @param \Imagine\Image\ImageInterface $pasteImage
-     * @param \Imagine\Image\ImageInterface $image
+     * @param string         $point
+     * @param ImageInterface $pasteImage
+     * @param ImageInterface $image
      *
      * @return integer
      */
@@ -84,9 +80,9 @@ class PasteFilter implements FilterInterface
     {
         switch ($point) {
             case 'bottom':
-                return (integer) $image->getSize()->getHeight() - $pasteImage->getSize()->getHeight();
+                return (int) $image->getSize()->getHeight() - $pasteImage->getSize()->getHeight();
             case 'middle':
-                return (integer) round( ($image->getSize()->getHeight() / 2) - ($pasteImage->getSize()->getHeight() / 2) );
+                return (int) round(($image->getSize()->getHeight() / 2) - ($pasteImage->getSize()->getHeight() / 2));
             case 'top':
             default:
                 return 0;
@@ -98,7 +94,7 @@ class PasteFilter implements FilterInterface
      * @param string $pointName
      * @param array $allowedStringValues
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function throwIfPointNotValid($point, $pointName, array $allowedStringValues)
     {
@@ -110,7 +106,7 @@ class PasteFilter implements FilterInterface
             return;
         }
 
-        throw new \InvalidArgumentException(sprintf(
+        throw new InvalidArgumentException(sprintf(
             'Expected "%s" one of the [%s] or integer greater than zero',
             $pointName,
             implode('|', $allowedStringValues)

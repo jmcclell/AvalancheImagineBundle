@@ -2,6 +2,7 @@
 
 namespace Avalanche\Bundle\ImagineBundle\DependencyInjection;
 
+use InvalidArgumentException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -27,7 +28,7 @@ class AvalancheImagineExtension extends Extension
         }
 
         if (!in_array($driver, array('gd', 'imagick', 'gmagick'))) {
-            throw new \InvalidArgumentException('Invalid imagine driver specified');
+            throw new InvalidArgumentException('Invalid imagine driver specified');
         }
 
         $container->setAlias('imagine', new Alias('imagine.'.$driver));

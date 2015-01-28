@@ -7,16 +7,15 @@ use InvalidArgumentException;
 
 class ChainFilter implements FilterInterface
 {
-
     /**
-     * @var \Imagine\Filter\FilterInterface[]
+     * @var FilterInterface[]
      */
     protected $filters;
 
     /**
-     * @param \Imagine\Filter\FilterInterface[] $filters
+     * @param FilterInterface[] $filters
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(array $filters)
     {
@@ -34,7 +33,6 @@ class ChainFilter implements FilterInterface
      */
     public function apply(ImageInterface $image)
     {
-        /** @var $filter \Imagine\Filter\FilterInterface */
         foreach ($this->filters as $filter) {
             $image = $filter->apply($image);
         }

@@ -2,9 +2,9 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Imagine;
 
-use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
 use Imagine\Image\ImagineInterface;
+use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 
 class CacheManager
@@ -47,6 +47,8 @@ class CacheManager
      * @param string $filter
      *
      * @return string|null
+     *
+     * @throws RuntimeException
      */
     public function cacheImage($basePath, $path, $filter)
     {
@@ -83,11 +85,11 @@ class CacheManager
         if (!is_dir($dir)) {
             try {
                 if (false === $this->filesystem->mkdir($dir)) {
-                    throw new \RuntimeException(sprintf(
+                    throw new RuntimeException(sprintf(
                         'Could not create directory %s', $dir
                     ));
                 }
-            } catch (\Exception $e) {
+            } catch (RuntimeException $e) {
                 if (!is_dir($dir)) {
                     throw $e;
                 }
@@ -106,12 +108,12 @@ class CacheManager
         try {
             if (!chmod($realPath, $this->permissions))
             {
-                throw new \RuntimeException(sprintf(
+                throw new RuntimeException(sprintf(
                     'Could not set permissions %s on image saved in %s', $this->permissions, $realPath
                 ));
             }
             
-        } catch (Exception $e) {
+        } catch (RuntimeException $e) {
             throw $e;
         }
         

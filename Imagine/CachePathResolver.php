@@ -13,15 +13,15 @@ class CachePathResolver
     private $webRoot;
 
     /**
-     * @var Symfony\Component\Routing\RouterInterface
+     * @var RouterInterface
      */
     private $router;
 
     /**
      * Constructs cache path resolver with a given web root and cache prefix
      *
-     * @param string                                    $webRoot
-     * @param Symfony\Component\Routing\RouterInterface $router
+     * @param string          $webRoot
+     * @param RouterInterface $router
      */
     public function __construct($webRoot, RouterInterface $router)
     {
@@ -32,9 +32,11 @@ class CachePathResolver
     /**
      * Gets filtered path for rendering in the browser
      *
-     * @param string $path
-     * @param string $filter
+     * @param string  $path
+     * @param string  $filter
      * @param boolean $absolute
+     *
+     * @return mixed
      */
     public function getBrowserPath($path, $filter, $absolute = false)
     {

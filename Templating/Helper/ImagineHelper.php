@@ -8,15 +8,10 @@ use Symfony\Component\Templating\Helper\Helper;
 class ImagineHelper extends Helper
 {
     /**
-     * @var Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver
+     * @var CachePathResolver
      */
     private $cachePathResolver;
 
-    /**
-     * Constructs by setting $cachePathResolver
-     *
-     * @param Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver $cachePathResolver
-     */
     public function __construct(CachePathResolver $cachePathResolver)
     {
         $this->cachePathResolver = $cachePathResolver;

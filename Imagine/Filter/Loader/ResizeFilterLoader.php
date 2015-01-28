@@ -7,9 +7,6 @@ use Imagine\Image\Box;
 
 class ResizeFilterLoader implements LoaderInterface
 {
-    /**
-     * @see Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\LoaderInterface::load()
-     */
     public function load(array $options = array())
     {
         list($width, $height) = $options['size'];

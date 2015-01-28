@@ -2,11 +2,10 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader;
 
-use Imagine\Image\Box;
-use Imagine\Image\Point;
-
 use Imagine\Filter\Basic\Crop;
+use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
+use Imagine\Image\Point;
 
 class CropFilterLoader implements LoaderInterface
 {

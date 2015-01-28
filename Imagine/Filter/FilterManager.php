@@ -26,8 +26,10 @@ class FilterManager
 
     /**
      * @param string $name
-     * @return \Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\LoaderInterface
-     * @throws \Imagine\Exception\InvalidArgumentException
+     *
+     * @return LoaderInterface
+     *
+     * @throws InvalidArgumentException
      */
     public function getLoader($name)
     {
@@ -42,8 +44,10 @@ class FilterManager
 
     /**
      * @param string $filter
+     *
      * @return \Imagine\Filter\FilterInterface
-     * @throws \Imagine\Exception\InvalidArgumentException
+     *
+     * @throws InvalidArgumentException
      */
     public function getFilter($filter)
     {

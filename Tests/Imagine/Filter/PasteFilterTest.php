@@ -4,8 +4,9 @@ namespace Avalanche\Bundle\ImagineBundle\Tests\Imagine\Filter;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\PasteFilter;
 use Imagine\Image\Point;
 use Imagine\Image\Box;
+use PHPUnit_Framework_TestCase;
 
-class PasteFilterTest extends \PHPUnit_Framework_TestCase
+class PasteFilterTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test

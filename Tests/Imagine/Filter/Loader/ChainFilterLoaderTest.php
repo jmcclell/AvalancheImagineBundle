@@ -2,10 +2,11 @@
 namespace Avalanche\Bundle\ImagineBundle\Tests\Imagine\Filter\Loader;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\ChainFilterLoader;
-use Symfony\Component\DependencyInjection\Container;
 use Avalanche\Bundle\ImagineBundle\Tests\Imagine\Filter\Loader\Files\Filter;
+use Symfony\Component\DependencyInjection\Container;
+use PHPUnit_Framework_TestCase;
 
-class ChainFilterLoaderTest extends \PHPUnit_Framework_TestCase
+class ChainFilterLoaderTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test

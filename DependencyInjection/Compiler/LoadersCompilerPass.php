@@ -2,6 +2,7 @@
 
 namespace Avalanche\Bundle\ImagineBundle\DependencyInjection\Compiler;
 
+use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -19,7 +20,7 @@ class LoadersCompilerPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds('imagine.filter.loader') as $id => $tags) {
             foreach ($tags as $tag) {
                 if (empty($tag['filter'])) {
-                    throw new \InvalidArgumentException(sprintf('The "filter" attribute is missing for the service "%s"', $id));
+                    throw new InvalidArgumentException(sprintf('The "filter" attribute is missing for the service "%s"', $id));
                 }
 
                 $manager->addMethodCall('addLoader', array($tag['filter'], new Reference($id)));

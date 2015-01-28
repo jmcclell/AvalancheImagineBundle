@@ -2,12 +2,15 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Controller;
 
+use Avalanche\Bundle\ImagineBundle\Imagine\CacheManager;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
+use DateTime;
+use Exception;
 use Imagine\Image\ImagineInterface;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Avalanche\Bundle\ImagineBundle\Imagine\CacheManager;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class ImagineController
@@ -28,7 +31,7 @@ class ImagineController
     private $cacheManager;
 
     /**
-     * @var Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager
+     * @var FilterManager
      */
     private $filterManager;
 
@@ -94,18 +97,18 @@ class ImagineController
             ($cacheType === "public") ? $response->setPublic() : $response->setPrivate();
 
             $cacheExpires = $this->filterManager->getOption($filter, "cache_expires", "1 day");
-            $expirationDate = new \DateTime("+" . $cacheExpires);
+            $expirationDate = new DateTime("+" . $cacheExpires);
             $maxAge = $expirationDate->format("U") - time();
 
             if ($maxAge < 0) {
-                throw new \InvalidArgumentException("Invalid cache expiration date");
+                throw new InvalidArgumentException("Invalid cache expiration date");
             }
 
             $response->setExpires($expirationDate);
             $response->setMaxAge($maxAge);
 
             return $response;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             ob_end_clean();
             throw $e;
         }

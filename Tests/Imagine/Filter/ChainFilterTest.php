@@ -2,8 +2,9 @@
 namespace Avalanche\Bundle\ImagineBundle\Tests\Imagine\Filter;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\ChainFilter;
+use PHPUnit_Framework_TestCase;
 
-class ChainFilterTest extends \PHPUnit_Framework_TestCase
+class ChainFilterTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
