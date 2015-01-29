@@ -21,7 +21,6 @@ class ImagineExtension extends Twig_Extension
 
     /**
      * (non-PHPdoc)
-     * @see Twig_Extension::getFilters()
      */
     public function getFilters()
     {
@@ -32,7 +31,6 @@ class ImagineExtension extends Twig_Extension
 
     /**
      * {non-PHPdoc}
-     * @return Twig_Extension::getFunctions()
      */
     public function getFunctions()
     {
@@ -57,7 +55,6 @@ class ImagineExtension extends Twig_Extension
 
     /**
      * (non-PHPdoc)
-     * @see Twig_ExtensionInterface::getName()
      */
     public function getName()
     {

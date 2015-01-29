@@ -11,9 +11,6 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class AvalancheImagineExtension extends Extension
 {
-    /**
-     * @see Symfony\Component\DependencyInjection\Extension.ExtensionInterface::load()
-     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
@@ -51,10 +48,6 @@ class AvalancheImagineExtension extends Extension
         return $config;
     }
 
-    /**
-     * @see Symfony\Component\DependencyInjection\Extension.ExtensionInterface::getAlias()
-     * @codeCoverageIgnore
-     */
     function getAlias()
     {
         return 'avalanche_imagine';

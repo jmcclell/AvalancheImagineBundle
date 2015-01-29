@@ -1,4 +1,5 @@
 <?php
+
 namespace Avalanche\Bundle\ImagineBundle\Tests\Imagine\Filter;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\ChainFilter;

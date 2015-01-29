@@ -4,7 +4,6 @@ namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use Imagine\Exception\InvalidArgumentException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class FilterManager
 {

@@ -1,4 +1,5 @@
 <?php
+
 namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\PasteFilter;
@@ -19,6 +20,8 @@ class PasteFilterLoader implements LoaderInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @throws InvalidArgumentException
      */
     function load(array $options = array())
     {

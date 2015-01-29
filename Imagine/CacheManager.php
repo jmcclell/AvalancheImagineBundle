@@ -95,7 +95,7 @@ class CacheManager
             }
         }
 
-        // TODO: get rid of hard-coded quality and format
+        // TODO: get rid of hard-coded quality
         $this->filterManager->getFilter($filter)
             ->apply($this->imagine->open($sourcePath))
             ->save($realPath, array(

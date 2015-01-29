@@ -1,4 +1,5 @@
 <?php
+
 namespace Avalanche\Bundle\ImagineBundle\Tests\Imagine\Filter\Loader\Files;
 
 use Imagine\Filter\FilterInterface;

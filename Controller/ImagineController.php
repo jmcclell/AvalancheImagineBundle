@@ -35,14 +35,6 @@ class ImagineController
      */
     private $filterManager;
 
-    /**
-     * Constructs by setting $cachePathResolver
-     *
-     * @param Request          $request
-     * @param ImagineInterface $imagine
-     * @param CacheManager     $cacheManager
-     * @param FilterManager    $filterManager
-     */
     public function __construct(ImagineInterface $imagine, CacheManager $cacheManager, FilterManager $filterManager)
     {
         $this->imagine       = $imagine;
@@ -58,6 +50,8 @@ class ImagineController
      * @param string $filter
      *
      * @return Response
+     *
+     * @throws Exception
      */
     public function filter($path, $filter)
     {
