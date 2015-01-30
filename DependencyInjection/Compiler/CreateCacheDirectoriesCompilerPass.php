@@ -17,19 +17,18 @@ class CreateCacheDirectoriesCompilerPass implements CompilerPassInterface
         $filters     = $container->getParameter('imagine.filters');
         $filesystem  = new Filesystem();
 
+        $dirs = [];
         foreach ($filters as $filter => $options) {
-            if (isset($options['path'])) {
-                $dir = $webRoot . '/' . $options['path'];
-            } else {
-                $dir = $webRoot . '/' . $cachePrefix . '/' . $filter;
-            }
+            $dirs[] = isset($options['path'])
+                ? $webRoot . '/' . $options['path']
+                : $webRoot . '/' . $cachePrefix . '/' . $filter;
+        }
 
-            try {
-                $filesystem->mkdir($dir);
-            } catch (IOException $e) {
-                $message = sprintf('Could not create directory for caching processed images in "%s"', $dir);
-                throw new RuntimeException($message, 0, $e);
-            }
+        try {
+            $filesystem->mkdir($dirs);
+        } catch (IOException $e) {
+            $message = sprintf('Could not create one of image cache directories: "%s"', implode(', ', $dirs));
+            throw new RuntimeException($message, 0, $e);
         }
     }
 }
