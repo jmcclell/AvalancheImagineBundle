@@ -49,18 +49,16 @@ class CachePathResolver
             return $path;
         }
 
-        $path = str_replace(
-            urlencode(ltrim($path, '/')),
-            urldecode(ltrim($path, '/')),
-            $this->router->generate('_imagine_' . $filter, ['path' => ltrim($path, '/')], $absolute)
-        );
+        $path = ltrim($path, '/');
+        $uri  = $this->router->generate('_imagine_' . $filter, ['path' => $path], $absolute);
+        $uri  = str_replace(urlencode($path), urldecode($path), $uri);
 
-        $cached = realpath($this->webRoot . $path);
+        $cached = realpath($this->webRoot . $uri);
 
         if (file_exists($cached) && !is_dir($cached) && filemtime($realPath) > filemtime($cached)) {
             unlink($cached);
         }
 
-        return $path;
+        return $uri;
     }
 }
