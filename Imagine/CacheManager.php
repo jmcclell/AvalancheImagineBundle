@@ -5,6 +5,7 @@ namespace Avalanche\Bundle\ImagineBundle\Imagine;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
 use Imagine\Image\ImagineInterface;
 use RuntimeException;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
 class CacheManager
@@ -104,13 +105,10 @@ class CacheManager
             ->save($realPath, $options);
 
         try {
-            if (!chmod($realPath, $this->permissions)) {
-                $message = sprintf('Could not set permissions %s on image saved in %s', $this->permissions, $realPath);
-                throw new RuntimeException($message);
-            }
-
-        } catch (RuntimeException $e) {
-            throw $e;
+            $this->filesystem->chmod($realPath, $this->permissions);
+        } catch (IOException $e) {
+            $message = sprintf('Could not set permissions %s on image saved in %s', $this->permissions, $realPath);
+            throw new RuntimeException($message);
         }
 
         return $realPath;
