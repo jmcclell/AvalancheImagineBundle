@@ -54,8 +54,7 @@ class CacheManager
     {
         $path = '/' . ltrim($path, '/');
 
-        //TODO: find out why I need double urldecode to get a valid path
-        $browserPath = urldecode(urldecode($this->cachePathResolver->getBrowserPath($path, $filter)));
+        $browserPath = urldecode($this->cachePathResolver->getBrowserPath($path, $filter));
 
         if (!empty($basePath) && 0 === strpos($browserPath, $basePath)) {
             $browserPath = substr($browserPath, strlen($basePath));
