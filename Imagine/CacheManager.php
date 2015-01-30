@@ -84,13 +84,9 @@ class CacheManager
 
         if (!is_dir($dir)) {
             try {
-                if (false === $this->filesystem->mkdir($dir)) {
-                    throw new RuntimeException(sprintf('Could not create directory %s', $dir));
-                }
-            } catch (RuntimeException $e) {
-                if (!is_dir($dir)) {
-                    throw $e;
-                }
+                $this->filesystem->mkdir($dir);
+            } catch (IOException $e) {
+                throw new RuntimeException(sprintf('Could not create directory %s', $dir));
             }
         }
 
