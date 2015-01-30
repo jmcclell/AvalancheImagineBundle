@@ -29,13 +29,9 @@ class ChainFilterLoader implements LoaderInterface
 
         $filters = array();
 
-        foreach ($options['filters'] as $loaderName => $loaderOptions) {
-
-            $loader = $this->filterManager->getLoader($loaderName);
-
-            $loaderOptions = is_array($loaderOptions) ? $loaderOptions : array();
-
-            $filters[] = $loader->load($loaderOptions);
+        foreach ($options['filters'] as $loaderName => $opts) {
+            $filters[] = $this->filterManager->getLoader($loaderName)
+                ->load(is_array($opts) ? $opts : []);
         }
 
         return new ChainFilter($filters);

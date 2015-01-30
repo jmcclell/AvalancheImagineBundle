@@ -33,9 +33,8 @@ class FilterManager
     public function getLoader($name)
     {
         if (!isset($this->loaders[$name])) {
-            throw new InvalidArgumentException(sprintf(
-                'Could not find loader for "%s" filter type', $name
-            ));
+            $message = sprintf('Could not find loader for "%s" filter type', $name);
+            throw new InvalidArgumentException($message);
         }
 
         return $this->loaders[$name];
@@ -51,23 +50,20 @@ class FilterManager
     public function getFilter($filter)
     {
         if (!isset($this->filters[$filter])) {
-            throw new InvalidArgumentException(sprintf(
-                'Could not find image filter "%s"', $filter
-            ));
+            $message = sprintf('Could not find image filter "%s"', $filter);
+            throw new InvalidArgumentException($message);
         }
 
         $options = $this->filters[$filter];
 
         if (!isset($options['type'])) {
-            throw new InvalidArgumentException(sprintf(
-                'Filter type for "%s" image filter must be specified', $filter
-            ));
+            $message = sprintf('Filter type for "%s" image filter must be specified', $filter);
+            throw new InvalidArgumentException($message);
         }
 
         if (!isset($options['options'])) {
-            throw new InvalidArgumentException(sprintf(
-                'Options for filter type "%s" must be specified', $filter
-            ));
+            $message = sprintf('Options for filter type "%s" must be specified', $filter);
+            throw new InvalidArgumentException($message);
         }
 
         return $this->getLoader($options['type'])->load($options['options']);
@@ -75,13 +71,8 @@ class FilterManager
 
     public function getOption($filter, $name, $default = null)
     {
-
         $options = $this->filters[$filter];
 
-        if ($options && isset($options["options"]) && isset($options["options"][$name])) {
-            return $options["options"][$name];
-        }
-
-        return $default;
+        return isset($options["options"][$name]) ? $options["options"][$name] : $default;
     }
 }

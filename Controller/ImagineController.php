@@ -77,14 +77,10 @@ class ImagineController
             $content = ob_get_clean();
 
             // TODO: add more media headers
-            $response = new Response($content, 201, array(
-                'content-type'   => $type,
-                'content-length' => $length,
-            ));
+            $response = new Response($content, 201, ['content-type' => $type, 'content-length' => $length]);
 
             // Cache
-            $cacheType = $this->filterManager->getOption($filter, "cache_type", false);
-            if (!$cacheType) {
+            if (!$cacheType = $this->filterManager->getOption($filter, "cache_type", false)) {
                 return $response;
             }
 

@@ -8,9 +8,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class AvalancheImagineBundle extends Bundle
 {
-    /**
-     * @see Symfony\Component\HttpKernel\Bundle.Bundle::build()
-     */
     public function build(ContainerBuilder $container)
     {
         parent::build($container);

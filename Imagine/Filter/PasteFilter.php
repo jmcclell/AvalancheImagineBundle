@@ -93,13 +93,13 @@ class PasteFilter implements FilterInterface
     /**
      * @param integer|string $point
      * @param string         $pointName
-     * @param array          $allowedStringValues
+     * @param array          $allowedLiterals
      *
      * @throws InvalidArgumentException
      */
-    protected function throwIfPointNotValid($point, $pointName, array $allowedStringValues)
+    protected function throwIfPointNotValid($point, $pointName, array $allowedLiterals)
     {
-        if (is_string($point) && in_array($point, $allowedStringValues)) {
+        if (is_string($point) && in_array($point, $allowedLiterals)) {
             return;
         }
 
@@ -107,10 +107,7 @@ class PasteFilter implements FilterInterface
             return;
         }
 
-        throw new InvalidArgumentException(sprintf(
-            'Expected "%s" one of the [%s] or integer greater than zero',
-            $pointName,
-            implode('|', $allowedStringValues)
-        ));
+        $message = 'Expected "%s" one of the [%s] or integer greater than zero';
+        throw new InvalidArgumentException(sprintf($message, $pointName, implode('|', $allowedLiterals)));
     }
 }

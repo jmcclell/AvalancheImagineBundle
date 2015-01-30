@@ -52,9 +52,7 @@ class CachePathResolver
         $path = str_replace(
             urlencode(ltrim($path, '/')),
             urldecode(ltrim($path, '/')),
-            $this->router->generate('_imagine_' . $filter, array(
-                'path' => ltrim($path, '/')
-            ), $absolute)
+            $this->router->generate('_imagine_' . $filter, ['path' => ltrim($path, '/')], $absolute)
         );
 
         $cached = realpath($this->webRoot . $path);

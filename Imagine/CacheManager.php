@@ -84,9 +84,7 @@ class CacheManager
         if (!is_dir($dir)) {
             try {
                 if (false === $this->filesystem->mkdir($dir)) {
-                    throw new RuntimeException(sprintf(
-                        'Could not create directory %s', $dir
-                    ));
+                    throw new RuntimeException(sprintf('Could not create directory %s', $dir));
                 }
             } catch (RuntimeException $e) {
                 if (!is_dir($dir)) {
@@ -96,18 +94,19 @@ class CacheManager
         }
 
         // TODO: get rid of hard-coded quality
+        $options = [
+            'quality' => $this->filterManager->getOption($filter, "quality", 100),
+            'format'  => $this->filterManager->getOption($filter, "format", null),
+        ];
+
         $this->filterManager->getFilter($filter)
             ->apply($this->imagine->open($sourcePath))
-            ->save($realPath, array(
-                'quality' => $this->filterManager->getOption($filter, "quality", 100),
-                'format'  => $this->filterManager->getOption($filter, "format", null)
-            ));
+            ->save($realPath, $options);
 
         try {
             if (!chmod($realPath, $this->permissions)) {
-                throw new RuntimeException(sprintf(
-                    'Could not set permissions %s on image saved in %s', $this->permissions, $realPath
-                ));
+                $message = sprintf('Could not set permissions %s on image saved in %s', $this->permissions, $realPath);
+                throw new RuntimeException($message);
             }
 
         } catch (RuntimeException $e) {

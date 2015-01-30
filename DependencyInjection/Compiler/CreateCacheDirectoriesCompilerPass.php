@@ -21,13 +21,9 @@ class CreateCacheDirectoriesCompilerPass implements CompilerPassInterface
                 $dir = $webRoot . '/' . $cachePrefix . '/' . $filter;
             }
 
-            if (!is_dir($dir)) {
-                if (!mkdir($dir, 0777, true)) {
-                    throw new RuntimeException(sprintf(
-                        'Could not create directory for caching processed ' .
-                        'images in "%s"', $dir
-                    ));
-                }
+            if (!is_dir($dir) && !mkdir($dir, 0777, true)) {
+                $message = sprintf('Could not create directory for caching processed images in "%s"', $dir);
+                throw new RuntimeException($message);
             }
         }
     }
