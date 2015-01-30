@@ -43,6 +43,8 @@ class CachePathResolver
         // unmodified path in that case
         $realPath = realpath($this->webRoot . $path);
 
+        // FIXME: This condition returns always FALSE.
+        // Only (!0 === true) will return true (impossible for strpos).
         if (!0 === strpos($realPath, $this->webRoot)) {
             return $path;
         }
