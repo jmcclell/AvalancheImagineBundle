@@ -84,7 +84,7 @@ class ImagineController
 
             // Cache
             $cacheType = $this->filterManager->getOption($filter, "cache_type", false);
-            if (false == $cacheType) {
+            if (!$cacheType) {
                 return $response;
             }
 

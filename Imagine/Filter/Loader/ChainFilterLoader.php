@@ -23,12 +23,8 @@ class ChainFilterLoader implements LoaderInterface
      */
     function load(array $options = array())
     {
-        if (false == isset($options['filters']) || false == is_array($options['filters'])) {
+        if (!isset($options['filters']) || !is_array($options['filters'])) {
             throw new InvalidArgumentException('Expected filters key and type of array');
-        }
-
-        if (false == $options['filters']) {
-            throw new InvalidArgumentException('At least one filter expected');
         }
 
         $filters = array();

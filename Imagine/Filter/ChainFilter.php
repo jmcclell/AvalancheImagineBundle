@@ -21,7 +21,7 @@ class ChainFilter implements FilterInterface
     public function __construct(array $filters)
     {
         foreach ($filters as $filter) {
-            if (false == ($filter instanceof FilterInterface)) {
+            if (!$filter instanceof FilterInterface) {
                 throw new InvalidArgumentException('Instance of Imagine\\Filter\\FilterInterface expected');
             }
         }

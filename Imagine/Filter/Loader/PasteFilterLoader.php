@@ -25,11 +25,11 @@ class PasteFilterLoader implements LoaderInterface
      */
     function load(array $options = array())
     {
-        if (false == isset($options['image'])) {
+        if (!isset($options['image'])) {
             throw new InvalidArgumentException('Option "image" is required.');
         }
 
-        if (false == is_readable($options['image'])) {
+        if (!is_readable($options['image'])) {
             throw new InvalidArgumentException('Expected image file exists and readable.');
         }
 
