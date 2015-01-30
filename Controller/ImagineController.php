@@ -53,7 +53,7 @@ class ImagineController
      *
      * @throws Exception
      */
-    public function filter($path, $filter)
+    public function filterAction($path, $filter)
     {
         try {
             $cachedPath = $this->cacheManager->cacheImage($this->request->getBaseUrl(), $path, $filter);
