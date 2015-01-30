@@ -107,6 +107,11 @@ class CacheManager
         try {
             $this->filesystem->chmod($realPath, $this->permissions);
         } catch (IOException $e) {
+            try {
+                $this->filesystem->remove($sourcePath);
+            } catch (IOException $e) {
+            }
+
             $message = sprintf('Could not set permissions %s on image saved in %s', $this->permissions, $realPath);
             throw new RuntimeException($message);
         }
