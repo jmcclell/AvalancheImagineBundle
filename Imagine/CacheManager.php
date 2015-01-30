@@ -86,7 +86,7 @@ class CacheManager
             try {
                 $this->filesystem->mkdir($dir);
             } catch (IOException $e) {
-                throw new RuntimeException(sprintf('Could not create directory %s', $dir));
+                throw new RuntimeException(sprintf('Could not create directory %s', $dir), 0, $e);
             }
         }
 
@@ -105,11 +105,11 @@ class CacheManager
         } catch (IOException $e) {
             try {
                 $this->filesystem->remove($sourcePath);
-            } catch (IOException $e) {
+            } catch (IOException $ee) {
             }
 
             $message = sprintf('Could not set permissions %s on image saved in %s', $this->permissions, $realPath);
-            throw new RuntimeException($message);
+            throw new RuntimeException($message, 0, $e);
         }
 
         return $realPath;
