@@ -5,6 +5,8 @@ namespace Avalanche\Bundle\ImagineBundle\DependencyInjection\Compiler;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 
 class CreateCacheDirectoriesCompilerPass implements CompilerPassInterface
 {
@@ -13,6 +15,7 @@ class CreateCacheDirectoriesCompilerPass implements CompilerPassInterface
         $webRoot     = $container->getParameter('imagine.web_root');
         $cachePrefix = $container->getParameter('imagine.cache_prefix');
         $filters     = $container->getParameter('imagine.filters');
+        $filesystem  = new Filesystem();
 
         foreach ($filters as $filter => $options) {
             if (isset($options['path'])) {
@@ -21,9 +24,11 @@ class CreateCacheDirectoriesCompilerPass implements CompilerPassInterface
                 $dir = $webRoot . '/' . $cachePrefix . '/' . $filter;
             }
 
-            if (!is_dir($dir) && !mkdir($dir, 0777, true)) {
+            try {
+                $filesystem->mkdir($dir);
+            } catch (IOException $e) {
                 $message = sprintf('Could not create directory for caching processed images in "%s"', $dir);
-                throw new RuntimeException($message);
+                throw new RuntimeException($message, 0, $e);
             }
         }
     }
