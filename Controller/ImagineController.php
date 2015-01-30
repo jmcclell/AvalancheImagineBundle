@@ -68,7 +68,7 @@ class ImagineController
 
         ob_start();
         try {
-            $format = $this->filterManager->getOption($filter, "format", "png");
+            $format = $this->filterManager->getOption($filter, 'format', 'png');
 
             $this->imagine->open($cachedPath)->show($format);
 
@@ -80,18 +80,18 @@ class ImagineController
             $response = new Response($content, 201, ['content-type' => $type, 'content-length' => $length]);
 
             // Cache
-            if (!$cacheType = $this->filterManager->getOption($filter, "cache_type", false)) {
+            if (!$cacheType = $this->filterManager->getOption($filter, 'cache_type', false)) {
                 return $response;
             }
 
-            ($cacheType === "public") ? $response->setPublic() : $response->setPrivate();
+            ($cacheType === 'public') ? $response->setPublic() : $response->setPrivate();
 
-            $cacheExpires   = $this->filterManager->getOption($filter, "cache_expires", "1 day");
-            $expirationDate = new DateTime("+" . $cacheExpires);
-            $maxAge         = $expirationDate->format("U") - time();
+            $cacheExpires   = $this->filterManager->getOption($filter, 'cache_expires', '1 day');
+            $expirationDate = new DateTime('+' . $cacheExpires);
+            $maxAge         = $expirationDate->format('U') - time();
 
             if ($maxAge < 0) {
-                throw new InvalidArgumentException("Invalid cache expiration date");
+                throw new InvalidArgumentException('Invalid cache expiration date');
             }
 
             $response->setExpires($expirationDate);

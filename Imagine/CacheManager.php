@@ -67,7 +67,7 @@ class CacheManager
 
         $realPath = $this->webRoot . $browserPath;
 
-        $sourcePathRoot = $this->filterManager->getOption($filter, "source_root", $this->sourceRoot);
+        $sourcePathRoot = $this->filterManager->getOption($filter, 'source_root', $this->sourceRoot);
         $sourcePath     = $sourcePathRoot . $path;
 
         // if the file has already been cached, just return path
@@ -95,8 +95,8 @@ class CacheManager
 
         // TODO: get rid of hard-coded quality
         $options = [
-            'quality' => $this->filterManager->getOption($filter, "quality", 100),
-            'format'  => $this->filterManager->getOption($filter, "format", null),
+            'quality' => $this->filterManager->getOption($filter, 'quality', 100),
+            'format'  => $this->filterManager->getOption($filter, 'format', null),
         ];
 
         $this->filterManager->getFilter($filter)

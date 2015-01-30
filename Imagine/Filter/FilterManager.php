@@ -73,6 +73,6 @@ class FilterManager
     {
         $options = $this->filters[$filter];
 
-        return isset($options["options"][$name]) ? $options["options"][$name] : $default;
+        return isset($options['options'][$name]) ? $options['options'][$name] : $default;
     }
 }
