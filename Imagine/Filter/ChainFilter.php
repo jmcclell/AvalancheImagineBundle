@@ -20,9 +20,19 @@ class ChainFilter implements FilterInterface
      */
     public function __construct(array $filters)
     {
+        $final = null;
         foreach ($filters as $filter) {
+            if ($final) {
+                $message = sprintf('Instance of %s must be used as last filter only', $final);
+                throw new InvalidArgumentException($message);
+            }
+
             if (!$filter instanceof FilterInterface) {
                 throw new InvalidArgumentException('Instance of Imagine\\Filter\\FilterInterface expected');
+            }
+
+            if ($filter instanceof FinalFilterInterface) {
+                $final = get_class($filter);
             }
         }
 
