@@ -45,6 +45,11 @@ class CachePathResolver
         $uri  = $this->router->generate('_imagine_' . $filter, ['path' => $path], $absolute);
         $uri  = str_replace(urlencode($path), urldecode($path), $uri);
 
+        // TODO: find better way then this hack.
+        if (preg_match('#^/\w+[.]php(/.*?)$#i', $uri, $m)) {
+            $uri = $m[1];
+        }
+
         $cached = realpath($this->webRoot . $uri);
 
         if (file_exists($cached) && !is_dir($cached) && filemtime($realPath) > filemtime($cached)) {
