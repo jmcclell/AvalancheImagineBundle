@@ -39,15 +39,7 @@ class CachePathResolver
      */
     public function getBrowserPath($path, $filter, $absolute = false)
     {
-        // identify if current path is not under specified web root and return
-        // unmodified path in that case
         $realPath = realpath($this->webRoot . $path);
-
-        // FIXME: This condition returns always FALSE.
-        // Only (!0 === true) will return true (impossible for strpos).
-        if (!0 === strpos($realPath, $this->webRoot)) {
-            return $path;
-        }
 
         $path = ltrim($path, '/');
         $uri  = $this->router->generate('_imagine_' . $filter, ['path' => $path], $absolute);
