@@ -95,6 +95,7 @@ class CacheManager
             'format'  => $this->filterManager->getOption($filter, 'format', null),
         ];
 
+        // Important! optipng filter returns an instance of ImageAssetWrapper.
         $this->filterManager->getFilter($filter)
             ->apply($this->imagine->open($sourcePath))
             ->save($realPath, $options);
