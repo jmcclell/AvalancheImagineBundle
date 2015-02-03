@@ -27,6 +27,7 @@
         "makasim/temp-file": "dev-master"
     },
     "suggest": {
+        "kriswallsmith/assetic": "Allows to use Assetic optipng filter (soon more too come)",
         "symfony/twig-bundle": "~2.0"
     },
     "autoload": {
