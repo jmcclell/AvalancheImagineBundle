@@ -50,8 +50,10 @@
 
         <parameter key="imagine.filter.loader.chain.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\ChainFilterLoader</parameter>
 
-        <parameter key="imagine.filter.loader.crop.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader</parameter> 
-        
+        <parameter key="imagine.filter.loader.crop.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader</parameter>
+
+        <parameter key="imagine.filter.loader.optipng.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\OptipngFilterLoader</parameter>
+
     </parameters>
 
     <services>
@@ -144,6 +146,11 @@
         
         <service id="imagine.filter.loader.crop" class="%imagine.filter.loader.crop.class%">
             <tag name="imagine.filter.loader" filter="crop" />
+        </service>
+
+        <service id="imagine.filter.loader.optipng" class="%imagine.filter.loader.optipng.class%">
+            <argument type="service" id="imagine" />
+            <tag name="imagine.filter.loader" filter="optipng" />
         </service>
 
     </services>
