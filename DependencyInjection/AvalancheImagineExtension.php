@@ -26,7 +26,7 @@ class AvalancheImagineExtension extends Extension
 
         $container->setAlias('imagine', new Alias('imagine.' . $driver));
 
-        foreach (array('cache_prefix', 'web_root', 'source_root', 'filters') as $key) {
+        foreach (array('cache_prefix', 'web_root', 'source_root', 'filters', 'not_found_images') as $key) {
             isset($config[$key]) && $container->setParameter('imagine.' . $key, $config[$key]);
         }
     }
