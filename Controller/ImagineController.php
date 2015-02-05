@@ -6,6 +6,7 @@ use Avalanche\Bundle\ImagineBundle\Imagine\CacheManager;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
 use DateTime;
 use Exception;
+use Imagine\Exception\RuntimeException;
 use Imagine\Image\ImagineInterface;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,8 +51,19 @@ class ImagineController
      */
     public function filterAction($path, $filter)
     {
+        $baseUrl = $this->request->getBaseUrl();
+
         try {
-            $cachedPath = $this->cacheManager->cacheImage($this->request->getBaseUrl(), $path, $filter);
+            try {
+                $cachedPath = $this->cacheManager->cacheImage($baseUrl, $path, $filter);
+            } catch (RuntimeException $e) {
+                if (!isset($this->notFoundImages[$filter])) {
+                    throw $e;
+                }
+
+                $path       = $this->notFoundImages[$filter];
+                $cachedPath = $this->cacheManager->cacheImage($baseUrl, $path, $filter);
+            }
         } catch (RouteNotFoundException $e) {
             throw new NotFoundHttpException('Filter doesn\'t exist.');
         }
