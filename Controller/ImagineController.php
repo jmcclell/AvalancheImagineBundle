@@ -27,6 +27,9 @@ class ImagineController
     /** @var FilterManager */
     private $filterManager;
 
+    /** @var array */
+    private $notFoundImages;
+
     public function __construct(ImagineInterface $imagine, CacheManager $cacheManager, FilterManager $filterManager)
     {
         $this->imagine       = $imagine;
@@ -104,5 +107,15 @@ class ImagineController
     public function setRequest(Request $request = null)
     {
         $this->request = $request;
+    }
+
+    /**
+     * Set the notFoundImage
+     *
+     * @param array $notFoundImages
+     */
+    public function setNotFoundImages(array $notFoundImages)
+    {
+        $this->notFoundImages = $notFoundImages;
     }
 }
