@@ -12,6 +12,7 @@
         <parameter key="imagine.cache_prefix">media/cache</parameter>
         <parameter key="imagine.filters" type="collection" />
         <parameter key="imagine.permissions">0644</parameter>
+        <parameter key="imagine.not_found_images" type="collection" />
 
         <!-- Utility classes -->
 
@@ -85,6 +86,9 @@
             <argument type="service" id="imagine" />
             <argument type="service" id="imagine.cache.manager" />
             <argument type="service" id="imagine.filter.manager" />
+			<call method="setNotFoundImages">
+				<argument>%imagine.not_found_images%</argument>
+			</call>
 			<call method="setRequest">
 				<argument type="service" id="request" on-invalid="null" strict="false" />
 			</call>
