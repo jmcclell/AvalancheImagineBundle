@@ -46,6 +46,7 @@ class CachePathResolver
         $uri  = str_replace(urlencode($path), urldecode($path), $uri);
 
         // TODO: find better way then this hack.
+        // This is required if we keep assets on separate [sub]domain or we use base non-root URL for them.
         if (preg_match('#^/\w+[.]php(/.*?)$#i', $uri, $m)) {
             $uri = $m[1];
         }
