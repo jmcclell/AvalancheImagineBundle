@@ -15,24 +15,16 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class ImagineController
 {
-    /**
-     * @var Request
-     */
+    /** @var Request */
     private $request;
 
-    /**
-     * @var ImagineInterface
-     */
+    /** @var ImagineInterface */
     private $imagine;
 
-    /**
-     * @var CacheManager
-     */
+    /** @var CacheManager */
     private $cacheManager;
 
-    /**
-     * @var FilterManager
-     */
+    /** @var FilterManager */
     private $filterManager;
 
     public function __construct(ImagineInterface $imagine, CacheManager $cacheManager, FilterManager $filterManager)
