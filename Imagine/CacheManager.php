@@ -17,7 +17,7 @@ class CacheManager
      * @param ImagineInterface  $imagine
      * @param FilterManager     $filterManager
      * @param Filesystem        $filesystem
-     * @param string            $webRoot
+     * @param ParamResolver     $params
      * @param string            $sourceRoot
      * @param int               $permissions
      */
@@ -26,7 +26,7 @@ class CacheManager
         ImagineInterface $imagine,
         FilterManager $filterManager,
         Filesystem $filesystem,
-        $webRoot,
+        ParamResolver $params,
         $sourceRoot,
         $permissions
     ) {
@@ -34,7 +34,7 @@ class CacheManager
         $this->imagine           = $imagine;
         $this->filterManager     = $filterManager;
         $this->filesystem        = $filesystem;
-        $this->webRoot           = $webRoot;
+        $this->webRoot           = $params->getWebRoot();
         $this->sourceRoot        = $sourceRoot;
         $this->permissions       = $permissions;
     }
