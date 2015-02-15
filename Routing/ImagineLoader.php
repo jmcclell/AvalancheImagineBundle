@@ -2,18 +2,19 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Routing;
 
+use Avalanche\Bundle\ImagineBundle\Imagine\ParamResolver;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 class ImagineLoader extends Loader
 {
-    private $cachePrefix;
+    private $cacheParams;
     private $filters;
 
-    public function __construct($cachePrefix, array $filters = array())
+    public function __construct(ParamResolver $params, array $filters = [])
     {
-        $this->cachePrefix = $cachePrefix;
+        $this->cacheParams = $params;
         $this->filters     = $filters;
     }
 
@@ -24,23 +25,32 @@ class ImagineLoader extends Loader
 
     public function load($resource, $type = null)
     {
-        $requirements = array('_method' => 'GET', 'filter' => '[A-z0-9_\-]*', 'path' => '.+');
-        $defaults     = array('_controller' => 'imagine.controller:filterAction');
-        $routes       = new RouteCollection();
+        $routes = new RouteCollection();
 
         foreach ($this->filters as $filter => $options) {
             if (isset($options['path'])) {
-                $pattern = '/' . trim($options['path'], '/') . '/{path}';
-            } else {
-                $pattern = '/' . trim($this->cachePrefix, '/') . '/{filter}/{path}';
+                $this->addRoute($routes, $filter, '/' . trim($options['path'], '/') . '/{path}');
+
+                return;
             }
 
-            $routes->add(
-                '_imagine_' . $filter,
-                new Route($pattern, array_merge($defaults, ['filter' => $filter]), $requirements)
-            );
+            foreach ($this->cacheParams->getRouteOptions() as $host => $cachePrefix) {
+                $this->addRoute($routes, $filter, '/' . trim($cachePrefix, '/') . '/{filter}/{path}', $host);
+            }
         }
 
         return $routes;
+    }
+
+    private function addRoute(RouteCollection $routes, $filter, $pattern, $host = '')
+    {
+        $requirements = ['_method' => 'GET', 'filter' => '[A-z0-9_\-]*', 'path' => '.+'];
+        $defaults     = ['_controller' => 'imagine.controller:filterAction'];
+        $routeSuffix  = $host ? '_' . preg_replace('#[^a-z0-9]+#i', '_', $host) : '';
+
+        $routes->add(
+            '_imagine_' . $filter . $routeSuffix,
+            new Route($pattern, array_merge($defaults, ['filter' => $filter]), $requirements, [], $host)
+        );
     }
 }
