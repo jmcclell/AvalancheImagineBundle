@@ -26,7 +26,21 @@ class AvalancheImagineExtension extends Extension
 
         $container->setAlias('imagine', new Alias('imagine.' . $driver));
 
-        foreach (array('cache_prefix', 'web_root', 'source_root', 'filters', 'not_found_images') as $key) {
+        if (isset($config['hosts']) && (isset($config['cache_prefix']) || isset($config['web_root']))) {
+            $message = 'You can only use "imagine.hosts" or ("imagine.cache_prefix" and "imagine.web_root"); not both';
+            throw new \InvalidActionException($message);
+        }
+
+        if (!isset($config['hosts'])) {
+            $config['hosts'] = [
+                'default' => [
+                    'cache_prefix' => isset($config['cache_prefix']) ? $config['cache_prefix'] : 'media/cache',
+                    'web_root'     => isset($config['web_root']) ? $config['web_root'] : '%kernel.root_dir%/../web',
+                ]
+            ];
+        }
+
+        foreach (array('source_root', 'filters', 'not_found_images', 'hosts') as $key) {
             isset($config[$key]) && $container->setParameter('imagine.' . $key, $config[$key]);
         }
     }
