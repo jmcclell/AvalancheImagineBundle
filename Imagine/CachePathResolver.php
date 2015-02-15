@@ -11,6 +11,9 @@ class CachePathResolver
      */
     private $webRoot;
 
+    /** @var string */
+    private $routeSuffix;
+
     /**
      * @var RouterInterface
      */
@@ -19,13 +22,14 @@ class CachePathResolver
     /**
      * Constructs cache path resolver with a given web root and cache prefix
      *
-     * @param string          $webRoot
+     * @param ParamResolver   $params
      * @param RouterInterface $router
      */
-    public function __construct($webRoot, RouterInterface $router)
+    public function __construct(ParamResolver $params, RouterInterface $router)
     {
-        $this->webRoot = $webRoot;
-        $this->router  = $router;
+        $this->webRoot     = $params->getWebRoot();
+        $this->routeSuffix = $params->getRouteSuffix();
+        $this->router      = $router;
     }
 
     /**
@@ -42,7 +46,7 @@ class CachePathResolver
         $realPath = realpath($this->webRoot . $path);
 
         $path = ltrim($path, '/');
-        $uri  = $this->router->generate('_imagine_' . $filter, ['path' => $path], $absolute);
+        $uri  = $this->router->generate('_imagine_' . $filter . $this->routeSuffix, ['path' => $path], $absolute);
         $uri  = str_replace(urlencode($path), urldecode($path), $uri);
 
         // TODO: find better way then this hack.
