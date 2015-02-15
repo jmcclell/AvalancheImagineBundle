@@ -67,7 +67,7 @@
         </service>
 
         <service id="imagine.cache.path.resolver" class="%imagine.cache.path.resolver.class%">
-            <argument>%imagine.web_root%</argument>
+            <argument type="service" id="imagine.cache.param.resolver" />
             <argument type="service" id="router" />
         </service>
 
@@ -76,7 +76,7 @@
             <argument type="service" id="imagine" />
             <argument type="service" id="imagine.filter.manager" />
             <argument type="service" id="filesystem" />
-            <argument>%imagine.web_root%</argument>
+            <argument type="service" id="imagine.cache.param.resolver" />
             <argument>%imagine.source_root%</argument>
             <argument>%imagine.permissions%</argument>
         </service>
@@ -103,13 +103,13 @@
 
         <service id="imagine.routing.loader" class="%imagine.routing.loader.class%">
             <tag name="routing.loader" />
-            <argument>%imagine.cache_prefix%</argument>
+            <argument type="service" id="imagine.cache.param.resolver" />
             <argument>%imagine.filters%</argument>
         </service>
 
         <!-- ImagineInterface instances -->
         
-        <service id="imagine" alias="imagine.gd" /> 
+        <service id="imagine" alias="imagine.gd" />
 
         <service id="imagine.gd" class="%imagine.gd.class%" />
 
