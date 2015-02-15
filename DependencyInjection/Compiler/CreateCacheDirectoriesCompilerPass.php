@@ -12,17 +12,22 @@ class CreateCacheDirectoriesCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $webRoot     = $container->getParameter('imagine.web_root');
-        $cachePrefix = $container->getParameter('imagine.cache_prefix');
-        $filters     = $container->getParameter('imagine.filters');
-        $filesystem  = new Filesystem();
+        $hosts      = $container->getParameter('imagine.hosts');
+        $filters    = $container->getParameter('imagine.filters');
+        $filesystem = new Filesystem();
 
         $dirs = [];
         foreach ($filters as $filter => $options) {
-            $dirs[] = isset($options['path'])
-                ? $webRoot . '/' . $options['path']
-                : $webRoot . '/' . $cachePrefix . '/' . $filter;
+            foreach ($hosts as $host => $params) {
+                $webRoot     = $params['web_root'];
+                $cachePrefix = $params['cache_prefix'];
+
+                $dirs[] = isset($options['path'])
+                    ? $webRoot . '/' . $options['path']
+                    : $webRoot . '/' . $cachePrefix . '/' . $filter;
+            }
         }
+        $dirs = array_unique($dirs);
 
         try {
             $filesystem->mkdir($dirs);
