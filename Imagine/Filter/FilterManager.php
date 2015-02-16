@@ -89,4 +89,14 @@ class FilterManager
 
         return isset($options['options'][$name]) ? $options['options'][$name] : $default;
     }
+
+    /**
+     * Get all configured filter names
+     *
+     * @return array
+     */
+    public function getFilterNames()
+    {
+        return array_keys($this->filters);
+    }
 }
