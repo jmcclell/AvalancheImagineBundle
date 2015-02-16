@@ -94,12 +94,14 @@ class CacheManager
         try {
             $image = $this->imagine->open($sourcePath);
         } catch (RuntimeException $e) {
-            // Make sure source path is an image
-            new ImageFile($sourcePath, false);
-
             try {
+                // Make sure source path is an image
+                new ImageFile($sourcePath, false);
+
                 // Do not pollute the space (don't copy anything; symlink is just fine)
                 $this->filesystem->symlink($sourcePath, $cachedPath);
+            } catch (RuntimeException $e) {
+                return null;
             } catch (IOException $e) {
                 // In case we were not able to create symlink we should return source path.
                 // This means we'll be back here, but at least we'll not be polluting space with useless copies.
