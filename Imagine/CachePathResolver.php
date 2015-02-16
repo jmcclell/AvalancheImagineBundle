@@ -66,12 +66,13 @@ class CachePathResolver
      *
      * @param string $path
      * @param string $filter
+     * @param bool   $evaluate
      *
      * @return null|string
      */
-    public function getCachedPath($path, $filter)
+    public function getCachedPath($path, $filter, $evaluate = false)
     {
-        return $this->findCachedFile($this->findCachedUri($path, $filter, false), false);
+        return $this->findCachedFile($this->findCachedUri($path, $filter, false), $evaluate);
     }
 
     /**
