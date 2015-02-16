@@ -3,7 +3,7 @@
 namespace Avalanche\Bundle\ImagineBundle\Controller;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\CacheManager;
-use Avalanche\Bundle\ImagineBundle\Imagine\File;
+use Avalanche\Bundle\ImagineBundle\Imagine\ImageFile;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
 use DateTime;
 use Exception;
@@ -76,12 +76,7 @@ class ImagineController
 
         try {
             // Using File instead of Imagine::open(), because i.e. image/x-icon is not widely supported.
-            $file = new File($cachedPath, false);
-
-            if (0 !== strpos($file->getMimeType(), 'image/')) {
-                $message = sprintf('File %s is not an image; Avalanche operates only on images', $cachedPath);
-                throw new RuntimeException($message);
-            }
+            $file = new ImageFile($cachedPath, false);
 
             // TODO: add more media headers
             $headers  = ['content-type' => $file->getMimeType(), 'content-length' => $file->getSize()];
