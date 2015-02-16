@@ -16,6 +16,8 @@ class CacheManager
     private $params;
     /** @var ImagineInterface */
     private $imagine;
+    /** @var FilterManager */
+    private $filterManager;
     /** @var Filesystem */
     private $filesystem;
     /** @var int */
