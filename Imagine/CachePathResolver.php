@@ -8,21 +8,12 @@ use Symfony\Component\Templating\Helper\CoreAssetsHelper;
 
 class CachePathResolver
 {
-    /** @var string */
-    private $webRoot;
-
-    /** @var string */
-    private $cachePrefix;
-
-    /** @var string */
-    private $routeSuffix;
-
+    /** @var ParamResolver */
+    private $params;
     /** @var RequestContext */
     private $context;
-
     /** @var RouterInterface */
     private $router;
-
     /** @var CoreAssetsHelper */
     private $assets;
 
@@ -38,35 +29,10 @@ class CachePathResolver
         RequestContext $context = null,
         CoreAssetsHelper $assets = null
     ) {
-        $this->webRoot     = $params->getWebRoot();
-        $this->cachePrefix = $this->preparePrefix($params, $assets);
-        $this->routeSuffix = $this->prepareSuffix($params, $assets);
-        $this->router      = $router;
-        $this->context     = $context;
-        $this->assets      = $assets;
-    }
-
-    /** @internal */
-    private function preparePrefix(ParamResolver $params, CoreAssetsHelper $assets = null)
-    {
-        if ($assets) {
-            $assetsHost = parse_url($assets->getUrl(''), PHP_URL_HOST);
-            $options    = $params->getRouteOptions();
-
-            return isset($options[$assetsHost]) ? $options[$assetsHost] : $options[''];
-        }
-
-        return $params->getCachePrefix();
-    }
-
-    /** @internal */
-    private function prepareSuffix(ParamResolver $params, CoreAssetsHelper $assets = null)
-    {
-        if ($assets) {
-            return '_' . preg_replace('#[^a-z0-9]+#i', '_', parse_url($assets->getUrl(''), PHP_URL_HOST));
-        }
-
-        return $params->getRouteSuffix();
+        $this->params  = $params;
+        $this->router  = $router;
+        $this->context = $context;
+        $this->assets  = $assets;
     }
 
     /**
@@ -80,20 +46,22 @@ class CachePathResolver
      */
     public function getBrowserPath($path, $filter, $absolute = false)
     {
-        $realPath = realpath($this->webRoot . $path);
+        $realPath = realpath($this->params->getWebRoot(false) . $path);
 
         $path = ltrim($path, '/');
-        $uri  = $this->router->generate('_imagine_' . $filter . $this->routeSuffix, ['path' => $path], $absolute);
+        $name = '_imagine_' . $filter . $this->params->getRouteSuffix();
+        $uri  = $this->router->generate($name, ['path' => $path], $absolute);
         $uri  = str_replace(urlencode($path), urldecode($path), $uri);
 
         // TODO: find better way then this hack.
         // This is required if we keep assets on separate [sub]domain or we use base non-root URL for them.
-        $pattern = sprintf('#^((?:[a-z]+:)?//.*?)?/\w+[.]php(/cache.*?)$#i', preg_quote($this->cachePrefix, '#'));
+        $prefix  = preg_quote($this->params->getCachePrefix(), '#');
+        $pattern = sprintf('#^((?:[a-z]+:)?//.*?)?/\w+[.]php(/cache.*?)$#i', $prefix);
         if (preg_match($pattern, $uri, $m)) {
             $uri = $m[1] . $m[2];
         }
 
-        $cached = realpath($this->webRoot . $uri);
+        $cached = realpath($this->params->getWebRoot(false) . $uri);
 
         if (file_exists($cached) && !is_dir($cached) && filemtime($realPath) > filemtime($cached)) {
             unlink($cached);
