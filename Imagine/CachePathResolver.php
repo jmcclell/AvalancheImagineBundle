@@ -2,22 +2,29 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Imagine;
 
+use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Templating\Helper\CoreAssetsHelper;
 
 class CachePathResolver
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $webRoot;
+
+    /** @var string */
+    private $cachePrefix;
 
     /** @var string */
     private $routeSuffix;
 
-    /**
-     * @var RouterInterface
-     */
+    /** @var RequestContext */
+    private $context;
+
+    /** @var RouterInterface */
     private $router;
+
+    /** @var CoreAssetsHelper */
+    private $assets;
 
     /**
      * Constructs cache path resolver with a given web root and cache prefix
@@ -25,11 +32,41 @@ class CachePathResolver
      * @param ParamResolver   $params
      * @param RouterInterface $router
      */
-    public function __construct(ParamResolver $params, RouterInterface $router)
-    {
+    public function __construct(
+        ParamResolver $params,
+        RouterInterface $router,
+        RequestContext $context = null,
+        CoreAssetsHelper $assets = null
+    ) {
         $this->webRoot     = $params->getWebRoot();
-        $this->routeSuffix = $params->getRouteSuffix();
+        $this->cachePrefix = $this->preparePrefix($params, $assets);
+        $this->routeSuffix = $this->prepareSuffix($params, $assets);
         $this->router      = $router;
+        $this->context     = $context;
+        $this->assets      = $assets;
+    }
+
+    /** @internal */
+    private function preparePrefix(ParamResolver $params, CoreAssetsHelper $assets = null)
+    {
+        if ($assets) {
+            $assetsHost = parse_url($assets->getUrl(''), PHP_URL_HOST);
+            $options    = $params->getRouteOptions();
+
+            return isset($options[$assetsHost]) ? $options[$assetsHost] : $options[''];
+        }
+
+        return $params->getCachePrefix();
+    }
+
+    /** @internal */
+    private function prepareSuffix(ParamResolver $params, CoreAssetsHelper $assets = null)
+    {
+        if ($assets) {
+            return '_' . preg_replace('#[^a-z0-9]+#i', '_', parse_url($assets->getUrl(''), PHP_URL_HOST));
+        }
+
+        return $params->getRouteSuffix();
     }
 
     /**
