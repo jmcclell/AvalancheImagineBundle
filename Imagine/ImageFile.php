@@ -2,9 +2,10 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Imagine;
 
-use Symfony\Component\HttpFoundation\File\File as BaseFile;
+use Imagine\Exception\RuntimeException;
+use Symfony\Component\HttpFoundation\File\File;
 
-class File extends BaseFile
+class ImageFile extends File
 {
     /**
      * Returns the contents of the file.
