@@ -63,7 +63,7 @@
 
         <service id="imagine.cache.param.resolver" class="%imagine.cache.param.resolver.class%">
             <argument>%imagine.hosts%</argument>
-            <argument type="service" id="router.request_context" on-invalid="null" />
+            <argument type="service" id="router.request_context" on-invalid="null" strict="false" />
         </service>
 
         <service id="imagine.cache.path.resolver" class="%imagine.cache.path.resolver.class%">
