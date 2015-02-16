@@ -96,6 +96,17 @@ class CacheManager
             }
         }
 
+        try {
+            $image = $this->imagine->open($sourcePath);
+        } catch (RuntimeException $e) {
+            // Make sure source path is an image
+            new ImageFile($sourcePath, false);
+
+            $this->filesystem->copy($sourcePath, $cachedPath);
+
+            return $cachedPath;
+        }
+
         $options = [
             'quality' => $this->filterManager->getOption($filter, 'quality', $this->defaultQuality),
             'format'  => $this->filterManager->getOption($filter, 'format', null),
