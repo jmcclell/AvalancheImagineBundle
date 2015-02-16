@@ -88,8 +88,9 @@ class CachePathResolver
 
         // TODO: find better way then this hack.
         // This is required if we keep assets on separate [sub]domain or we use base non-root URL for them.
-        if (preg_match('#^/\w+[.]php(/.*?)$#i', $uri, $m)) {
-            $uri = $m[1];
+        $pattern = sprintf('#^((?:[a-z]+:)?//.*?)?/\w+[.]php(/cache.*?)$#i', preg_quote($this->cachePrefix, '#'));
+        if (preg_match($pattern, $uri, $m)) {
+            $uri = $m[1] . $m[2];
         }
 
         $cached = realpath($this->webRoot . $uri);
