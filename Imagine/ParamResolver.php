@@ -10,6 +10,9 @@ class ParamResolver
     private $context;
     /** @var array */
     private $hosts;
+    /** @var boolean */
+    private $compiled;
+
     /** @var string */
     private $cachePrefix;
     /** @var string */
@@ -97,7 +100,7 @@ class ParamResolver
     /** @internal */
     private function prepare()
     {
-        if (isset($this->cachePrefix)) {
+        if ($this->compiled) {
             return;
         }
 
