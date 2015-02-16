@@ -71,13 +71,23 @@ class CachePathResolver
     }
 
     /** @internal */
-    private function findCachedUri($path, $filter, $absolute)
+    private function findCachedUri($path, $filter, $absolute, $generate = false)
     {
+        $assetsHost = !$generate;
+
         $path = ltrim($path, '/');
-        $name = '_imagine_' . $filter . $this->params->getRouteSuffix();
+        $name = '_imagine_' . $filter . $this->params->getRouteSuffix($assetsHost);
         $uri  = $this->router->generate($name, ['path' => $path], $absolute);
 
-        return str_replace(urlencode($path), urldecode($path), $uri);
+        $prefix  = preg_quote($this->params->getCachePrefix($assetsHost), '#');
+        if ($assetsHost) {
+            $pattern = sprintf('#^((?:[a-z]+:)?//.*?)?(?:/\w+[.]php)?(/%s.*?)$#i', $prefix);
+            if (preg_match($pattern, $uri, $m)) {
+                $uri = $m[1] . $m[2];
+            }
+        }
+
+        return str_replace(urlencode($path), $path, $uri);
     }
 
     /** @internal */
