@@ -55,7 +55,7 @@ class CachePathResolver
      * @param string  $filter
      * @param boolean $absolute
      *
-     * @return mixed
+     * @return string|null
      */
     public function getBrowserPath($path, $filter, $absolute = false)
     {
