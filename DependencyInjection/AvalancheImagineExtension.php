@@ -40,7 +40,7 @@ class AvalancheImagineExtension extends Extension
             ];
         }
 
-        foreach (array('source_root', 'filters', 'not_found_images', 'hosts') as $key) {
+        foreach (['source_root', 'permissions', 'filters', 'not_found_images', 'hosts']as $key) {
             isset($config[$key]) && $container->setParameter('imagine.' . $key, $config[$key]);
         }
     }
