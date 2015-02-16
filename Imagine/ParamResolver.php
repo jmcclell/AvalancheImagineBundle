@@ -23,6 +23,9 @@ class ParamResolver
     /** @var string[] */
     private $routeSuffix = [];
 
+    /** @var string */
+    private $assetsHost;
+
     /**
      * Constructs cache path resolver with a given web root and cache prefix
      *
@@ -125,5 +128,39 @@ class ParamResolver
                 throw new \InvalidArgumentException(sprintf($message, $key, $key));
             }
         }
+    }
+
+    /**
+     * Get current host name
+     *
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->context ? $this->context->getHost() : '';
+    }
+
+    /**
+     * Get host name used by web assets
+     *
+     * In case we don't have access to web request return "" (empty string).
+     *
+     * @return string
+     */
+    public function getAssetsHost()
+    {
+        if ($this->assetsHost) {
+            return $this->assetsHost;
+        }
+
+        if ($this->assets) {
+            $host = parse_url($this->assets->getUrl(''), PHP_URL_HOST);
+        } elseif ($this->context) {
+            $host = $this->context->getHost();
+        } else {
+            $host = '';
+        }
+
+        return $this->assetsHost = $host;
     }
 }
