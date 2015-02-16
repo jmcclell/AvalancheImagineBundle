@@ -4,7 +4,7 @@ namespace Avalanche\Bundle\ImagineBundle\Imagine;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
 use Imagine\Image\ImagineInterface;
-use RuntimeException;
+use Imagine\Exception\RuntimeException;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
