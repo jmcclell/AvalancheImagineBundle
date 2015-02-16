@@ -10,6 +10,19 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class CacheManager
 {
+    /** @var CachePathResolver */
+    private $cachePathResolver;
+    /** @var ParamResolver */
+    private $params;
+    /** @var ImagineInterface */
+    private $imagine;
+    /** @var Filesystem */
+    private $filesystem;
+    /** @var string */
+    private $sourceRoot;
+    /** @var int */
+    private $permissions;
+
     /**
      * CacheManager constructor.
      *
