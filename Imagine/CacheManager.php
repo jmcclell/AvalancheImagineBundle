@@ -60,7 +60,7 @@ class CacheManager
     /**
      * Forces image caching and returns path to cached image.
      *
-     * @param string $basePath
+     * @param string $basePath Deprecated parameter
      * @param string $path
      * @param string $filter
      *
