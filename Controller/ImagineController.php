@@ -3,6 +3,7 @@
 namespace Avalanche\Bundle\ImagineBundle\Controller;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\CacheManager;
+use Avalanche\Bundle\ImagineBundle\Imagine\File;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
 use DateTime;
 use Exception;
@@ -73,18 +74,12 @@ class ImagineController
             throw new NotFoundHttpException('Image doesn\'t exist');
         }
 
-        ob_start();
         try {
-            $format = $this->filterManager->getOption($filter, 'format', 'png');
-
-            $this->imagine->open($cachedPath)->show($format);
-
-            $type    = 'image/' . $format;
-            $length  = ob_get_length();
-            $content = ob_get_clean();
+            $file = new File($cachedPath, false);
 
             // TODO: add more media headers
-            $response = new Response($content, 201, ['content-type' => $type, 'content-length' => $length]);
+            $headers  = ['content-type' => $file->getMimeType(), 'content-length' => $file->getSize()];
+            $response = new Response($file->getContents(), 201, $headers);
 
             // Cache
             if (!$cacheType = $this->filterManager->getOption($filter, 'cache_type', false)) {
@@ -106,7 +101,6 @@ class ImagineController
 
             return $response;
         } catch (Exception $e) {
-            ob_end_clean();
             throw $e;
         }
     }
