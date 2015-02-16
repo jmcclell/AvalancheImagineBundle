@@ -77,6 +77,11 @@ class ImagineController
         try {
             $file = new File($cachedPath, false);
 
+            if (0 !== strpos($file->getMimeType(), 'image/')) {
+                $message = sprintf('File %s is not an image; Avalanche operates only on images', $cachedPath);
+                throw new RuntimeException($message);
+            }
+
             // TODO: add more media headers
             $headers  = ['content-type' => $file->getMimeType(), 'content-length' => $file->getSize()];
             $response = new Response($file->getContents(), 201, $headers);
