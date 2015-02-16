@@ -42,25 +42,29 @@ class ParamResolver
     /**
      * Get current best matching web root
      *
+     * @param boolean $assetsHost
+     *
      * @return string
      */
-    public function getWebRoot()
+    public function getWebRoot($assetsHost = true)
     {
         $this->prepare();
 
-        return $this->webRoot;
+        return $this->webRoot[$assetsHost ? $this->getAssetsHost() : $this->getHost()];
     }
 
     /**
      * Get current best matching cache prefix
      *
+     * @param boolean $assetsHost
+     *
      * @return string
      */
-    public function getCachePrefix()
+    public function getCachePrefix($assetsHost = true)
     {
         $this->prepare();
 
-        return $this->cachePrefix;
+        return $this->cachePrefix[$assetsHost ? $this->getAssetsHost() : $this->getHost()];
     }
 
     /**
@@ -68,13 +72,15 @@ class ParamResolver
      *
      * Since now host can be involved we need to distinguish imagine routes not only by used filter.
      *
+     * @param boolean $assetsHost
+     *
      * @return string
      */
-    public function getRouteSuffix()
+    public function getRouteSuffix($assetsHost = true)
     {
         $this->prepare();
 
-        return $this->routeSuffix;
+        return $this->routeSuffix[$assetsHost ? $this->getAssetsHost() : $this->getHost()];
     }
 
     /**
