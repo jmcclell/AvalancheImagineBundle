@@ -8,6 +8,22 @@ use Symfony\Component\HttpFoundation\File\File;
 class ImageFile extends File
 {
     /**
+     * @param string $path
+     * @param bool   $checkPath
+     *
+     * @throws RuntimeException
+     */
+    public function __construct($path, $checkPath = true)
+    {
+        parent::__construct($path, $checkPath);
+
+        if (0 !== strpos($this->getMimeType(), 'image/')) {
+            $message = sprintf('File %s is not an image; Avalanche operates only on images', $path);
+            throw new RuntimeException($message);
+        }
+    }
+
+    /**
      * Returns the contents of the file.
      *
      * @return string
