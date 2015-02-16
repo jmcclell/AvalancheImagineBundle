@@ -59,13 +59,23 @@ class CachePathResolver
      */
     public function getBrowserPath($path, $filter, $absolute = false)
     {
-        $realPath = realpath($this->manager->getOption($filter, 'source_root', $this->sourceRoot) . $path);
-        $uri      = $this->findCachedUri($path, $filter, $absolute);
-        $cached   = $this->findCachedFile($uri);
+        $uri    = $this->findCachedUri($path, $filter, $absolute);
+        $cached = $this->findCachedFile($uri, true);
 
-        if (file_exists($cached) && !is_dir($cached) && filemtime($realPath) > filemtime($cached)) {
-            unlink($cached);
+        if ($cached) {
+            if (!$realPath = $this->getRealPath($path, $filter)) {
+                unlink($cached);
+
+                return null;
+            }
+
+            if (filemtime($realPath) > filemtime($cached)) {
+                unlink($cached);
+                $cached = null;
+            }
         }
+
+        !$cached && ($uri = $this->findCachedUri($path, $filter, $absolute, true));
 
         return $uri;
     }
