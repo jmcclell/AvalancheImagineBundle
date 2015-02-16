@@ -19,7 +19,7 @@
         <parameter key="imagine.filter.manager.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager</parameter>
         <parameter key="imagine.cache.path.resolver.class">Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver</parameter>
         <parameter key="imagine.cache.manager.class">Avalanche\Bundle\ImagineBundle\Imagine\CacheManager</parameter>
-        <parameter key="imagine.cache.param.resolver.class">Avalanche\Bundle\ImagineBundle\Imagine\ParamResolver</parameter>
+        <parameter key="imagine.param.resolver.class">Avalanche\Bundle\ImagineBundle\Imagine\ParamResolver</parameter>
 
         <!-- Controller class -->
 
@@ -62,7 +62,7 @@
         
         <!-- Utility services -->
 
-        <service id="imagine.cache.param.resolver" class="%imagine.cache.param.resolver.class%">
+        <service id="imagine.param.resolver" class="%imagine.param.resolver.class%">
             <argument>%imagine.hosts%</argument>
             <argument type="service" id="router.request_context" on-invalid="null" strict="false" />
             <argument type="service" id="templating.helper.assets" on-invalid="null" strict="false" />
@@ -70,7 +70,7 @@
 
         <service id="imagine.cache.path.resolver" class="%imagine.cache.path.resolver.class%">
             <argument type="service" id="imagine.filter.manager" />
-            <argument type="service" id="imagine.cache.param.resolver" />
+            <argument type="service" id="imagine.param.resolver" />
             <argument type="service" id="router" />
             <argument>%imagine.source_root%</argument>
             <argument type="service" id="router.request_context" on-invalid="null" strict="false" />
@@ -109,7 +109,7 @@
 
         <service id="imagine.routing.loader" class="%imagine.routing.loader.class%">
             <tag name="routing.loader" />
-            <argument type="service" id="imagine.cache.param.resolver" />
+            <argument type="service" id="imagine.param.resolver" />
             <argument>%imagine.filters%</argument>
         </service>
 
