@@ -72,35 +72,21 @@ class CacheManager
     {
         $path = '/' . ltrim($path, '/');
 
-        $browserPath = urldecode($this->cachePathResolver->getBrowserPath($path, $filter));
-
-        (0 === strpos($browserPath, '//')) && ($browserPath = 'scheme:' . $browserPath);
-        strpos($browserPath, '://') && ($browserPath = parse_url($browserPath, PHP_URL_PATH));
-
-        if (!empty($basePath) && 0 === strpos($browserPath, $basePath)) {
-            $browserPath = substr($browserPath, strlen($basePath));
-        }
-
         // if cache path cannot be determined, return 404
-        if (null === $browserPath) {
+        if (!$cachedPath = $this->cachePathResolver->getCachedPath($path, $filter)) {
             return null;
         }
-
-        $realPath = $this->params->getWebRoot() . $browserPath;
-
-        $sourcePathRoot = $this->filterManager->getOption($filter, 'source_root', $this->sourceRoot);
-        $sourcePath     = $sourcePathRoot . $path;
 
         // if the file has already been cached, just return path
-        if (is_file($realPath)) {
-            return $realPath;
+        if (is_file($cachedPath)) {
+            return $cachedPath;
         }
 
-        if (!is_file($sourcePath)) {
+        if (!is_file($sourcePath = $this->cachePathResolver->getRealPath($path, $filter))) {
             return null;
         }
 
-        $dir = pathinfo($realPath, PATHINFO_DIRNAME);
+        $dir = pathinfo($cachedPath, PATHINFO_DIRNAME);
 
         if (!is_dir($dir)) {
             try {
@@ -116,22 +102,20 @@ class CacheManager
         ];
 
         // Important! optipng filter returns an instance of ImageAssetWrapper.
-        $this->filterManager->getFilter($filter)
-            ->apply($this->imagine->open($sourcePath))
-            ->save($realPath, $options);
+        $this->filterManager->getFilter($filter)->apply($image)->save($cachedPath, $options);
 
         try {
-            $this->filesystem->chmod($realPath, $this->permissions);
+            $this->filesystem->chmod($cachedPath, $this->permissions);
         } catch (IOException $e) {
             try {
-                $this->filesystem->remove($sourcePath);
+                $this->filesystem->remove($cachedPath);
             } catch (IOException $ee) {
             }
 
-            $message = sprintf('Could not set permissions %s on image saved in %s', $this->permissions, $realPath);
+            $message = sprintf('Could not set permissions %s on image saved in %s', $this->permissions, $cachedPath);
             throw new RuntimeException($message, 0, $e);
         }
 
-        return $realPath;
+        return $cachedPath;
     }
 }
