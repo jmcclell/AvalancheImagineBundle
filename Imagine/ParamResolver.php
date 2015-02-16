@@ -111,7 +111,16 @@ class ParamResolver
             return;
         }
 
-        $host = $this->context->getHost();
+        $this->compiled = true;
+
+        $this->compileFor($this->getHost());
+        if ($this->getAssetsHost() !== $this->getHost()) {
+            $this->compileFor($this->getAssetsHost());
+        }
+    }
+
+    private function compileFor($host)
+    {
         $map  = array(
             'cachePrefix' => 'cache_prefix',
             'webRoot'     => 'web_root',
