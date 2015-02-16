@@ -81,17 +81,24 @@ class CachePathResolver
     }
 
     /** @internal */
-    private function findCachedFile($uri)
+    private function findCachedFile($uri, $evaluate)
     {
         // TODO: find better way then this hack.
         // This is required if we keep assets on separate [sub]domain or we use base non-root URL for them.
         $cachedPath = $uri;
         $prefix     = preg_quote($this->params->getCachePrefix(), '#');
-        $pattern    = sprintf('#^((?:[a-z]+:)?//.*?)?/\w+[.]php(/%s.*?)$#i', $prefix);
+        $pattern    = sprintf('#^((?:[a-z]+:)?//.*?)?(?:/\w+[.]php)?(/%s.*?)$#i', $prefix);
         if (preg_match($pattern, $uri, $m)) {
-            $cachedPath = $m[1] . $m[2];
+            $cachedPath = $m[2];
         }
 
-        return realpath($this->params->getWebRoot() . $cachedPath);
+        $cached = $this->params->getWebRoot() . $cachedPath;
+        if (!$evaluate) {
+            return $cached;
+        }
+
+        $cached = realpath($cached);
+
+        return $cached && file_exists($cached) && !is_dir($cached) ? $cached : null;
     }
 }
