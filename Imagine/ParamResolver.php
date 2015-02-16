@@ -16,12 +16,12 @@ class ParamResolver
     /** @var CoreAssetsHelper */
     private $assets;
 
-    /** @var string */
-    private $cachePrefix;
-    /** @var string */
-    private $webRoot;
-    /** @var string */
-    private $routeSuffix;
+    /** @var string[] */
+    private $cachePrefix = [];
+    /** @var string[] */
+    private $webRoot = [];
+    /** @var string[] */
+    private $routeSuffix = [];
 
     /**
      * Constructs cache path resolver with a given web root and cache prefix
@@ -116,10 +116,10 @@ class ParamResolver
 
         foreach ($map as $field => $key) {
             if (isset($this->hosts[$host][$key])) {
-                $this->routeSuffix = '_' . preg_replace('#[^a-z0-9]+#i', '_', $host);
-                $this->$field      = $this->hosts[$host][$key];
+                $this->routeSuffix[$host] = '_' . preg_replace('#[^a-z0-9]+#i', '_', $host);
+                $this->{$field}[$host]    = $this->hosts[$host][$key];
             } elseif (isset($this->hosts['default'][$key])) {
-                $this->$field = $this->hosts['default'][$key];
+                $this->{$field}[$host] = $this->hosts['default'][$key];
             } else {
                 $message = '%s parameter is required by AvalancheImagineBundle; define imagine.hosts.default.%s';
                 throw new \InvalidArgumentException(sprintf($message, $key, $key));
