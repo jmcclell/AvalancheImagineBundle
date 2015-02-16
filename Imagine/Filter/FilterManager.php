@@ -69,6 +69,15 @@ class FilterManager
         return $this->getLoader($options['type'])->load($options['options']);
     }
 
+    /**
+     * Get filter option name
+     *
+     * @param string $filter
+     * @param string $name
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
     public function getOption($filter, $name, $default = null)
     {
         $options = $this->filters[$filter];
