@@ -31,10 +31,10 @@ class CacheManager
         $permissions
     ) {
         $this->cachePathResolver = $cachePathResolver;
+        $this->params            = $params;
         $this->imagine           = $imagine;
         $this->filterManager     = $filterManager;
         $this->filesystem        = $filesystem;
-        $this->webRoot           = $params->getWebRoot();
         $this->sourceRoot        = $sourceRoot;
         $this->permissions       = $permissions;
     }
@@ -68,7 +68,7 @@ class CacheManager
             return null;
         }
 
-        $realPath = $this->webRoot . $browserPath;
+        $realPath = $this->params->getWebRoot() . $browserPath;
 
         $sourcePathRoot = $this->filterManager->getOption($filter, 'source_root', $this->sourceRoot);
         $sourcePath     = $sourcePathRoot . $path;
