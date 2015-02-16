@@ -75,6 +75,7 @@ class ImagineController
         }
 
         try {
+            // Using File instead of Imagine::open(), because i.e. image/x-icon is not widely supported.
             $file = new File($cachedPath, false);
 
             if (0 !== strpos($file->getMimeType(), 'image/')) {
