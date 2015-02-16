@@ -68,8 +68,10 @@
         </service>
 
         <service id="imagine.cache.path.resolver" class="%imagine.cache.path.resolver.class%">
+            <argument type="service" id="imagine.filter.manager" />
             <argument type="service" id="imagine.cache.param.resolver" />
             <argument type="service" id="router" />
+            <argument>%imagine.source_root%</argument>
             <argument type="service" id="router.request_context" on-invalid="null" strict="false" />
             <argument type="service" id="templating.helper.assets" on-invalid="null" strict="false" />
         </service>
