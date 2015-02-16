@@ -25,8 +25,12 @@ class CachePathResolver
     /**
      * Constructs cache path resolver with a given web root and cache prefix
      *
-     * @param ParamResolver   $params
-     * @param RouterInterface $router
+     * @param FilterManager    $manager
+     * @param ParamResolver    $params
+     * @param RouterInterface  $router
+     * @param string           $sourceRoot
+     * @param RequestContext   $context
+     * @param CoreAssetsHelper $assets
      */
     public function __construct(
         FilterManager $manager,
