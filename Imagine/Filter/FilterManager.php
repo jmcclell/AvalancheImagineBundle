@@ -80,6 +80,11 @@ class FilterManager
      */
     public function getOption($filter, $name, $default = null)
     {
+        if (!isset($this->filters[$filter])) {
+            $message = sprintf('Could not find image filter "%s"', $filter);
+            throw new InvalidArgumentException($message);
+        }
+
         $options = $this->filters[$filter];
 
         return isset($options['options'][$name]) ? $options['options'][$name] : $default;
