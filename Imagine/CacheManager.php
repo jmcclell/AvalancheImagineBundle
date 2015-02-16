@@ -18,8 +18,6 @@ class CacheManager
     private $imagine;
     /** @var Filesystem */
     private $filesystem;
-    /** @var string */
-    private $sourceRoot;
     /** @var int */
     private $permissions;
     /** @var int */
@@ -33,7 +31,6 @@ class CacheManager
      * @param FilterManager     $filterManager
      * @param Filesystem        $filesystem
      * @param ParamResolver     $params
-     * @param string            $sourceRoot
      * @param int               $permissions
      * @param int               $defaultQuality
      */
@@ -43,7 +40,6 @@ class CacheManager
         FilterManager $filterManager,
         Filesystem $filesystem,
         ParamResolver $params,
-        $sourceRoot,
         $permissions,
         $defaultQuality
     ) {
@@ -52,7 +48,6 @@ class CacheManager
         $this->imagine           = $imagine;
         $this->filterManager     = $filterManager;
         $this->filesystem        = $filesystem;
-        $this->sourceRoot        = $sourceRoot;
         $this->permissions       = $permissions;
         $this->defaultQuality    = $defaultQuality;
     }

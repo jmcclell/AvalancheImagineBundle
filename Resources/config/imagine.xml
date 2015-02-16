@@ -83,7 +83,6 @@
             <argument type="service" id="imagine.filter.manager" />
             <argument type="service" id="filesystem" />
             <argument type="service" id="imagine.cache.param.resolver" />
-            <argument>%imagine.source_root%</argument>
             <argument>%imagine.permissions%</argument>
             <argument>%imagine.default_quality%</argument>
         </service>
