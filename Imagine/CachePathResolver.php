@@ -2,18 +2,23 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Imagine;
 
+use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Templating\Helper\CoreAssetsHelper;
 
 class CachePathResolver
 {
+    /** @var FilterManager */
+    private $manager;
     /** @var ParamResolver */
     private $params;
-    /** @var RequestContext */
-    private $context;
     /** @var RouterInterface */
     private $router;
+    /** @var string */
+    private $sourceRoot;
+    /** @var RequestContext */
+    private $context;
     /** @var CoreAssetsHelper */
     private $assets;
 
@@ -24,15 +29,19 @@ class CachePathResolver
      * @param RouterInterface $router
      */
     public function __construct(
+        FilterManager $manager,
         ParamResolver $params,
         RouterInterface $router,
+        $sourceRoot,
         RequestContext $context = null,
         CoreAssetsHelper $assets = null
     ) {
-        $this->params  = $params;
-        $this->router  = $router;
-        $this->context = $context;
-        $this->assets  = $assets;
+        $this->manager    = $manager;
+        $this->params     = $params;
+        $this->router     = $router;
+        $this->context    = $context;
+        $this->assets     = $assets;
+        $this->sourceRoot = $sourceRoot;
     }
 
     /**
@@ -46,7 +55,7 @@ class CachePathResolver
      */
     public function getBrowserPath($path, $filter, $absolute = false)
     {
-        $realPath = realpath($this->params->getWebRoot(false) . $path);
+        $realPath = realpath($this->manager->getOption($filter, 'source_root', $this->sourceRoot) . $path);
 
         $path = ltrim($path, '/');
         $name = '_imagine_' . $filter . $this->params->getRouteSuffix();
