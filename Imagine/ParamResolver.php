@@ -97,7 +97,7 @@ class ParamResolver
         }
         unset($options['default']);
 
-        if (!array_key_exists($this->context->getHost(), $options)) {
+        if (!array_key_exists($this->getAssetsHost(), $options)) {
             $options[''] = $this->cachePrefix;
         }
 
