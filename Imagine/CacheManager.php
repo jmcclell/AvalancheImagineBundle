@@ -22,6 +22,8 @@ class CacheManager
     private $sourceRoot;
     /** @var int */
     private $permissions;
+    /** @var int */
+    private $defaultQuality;
 
     /**
      * CacheManager constructor.
@@ -33,6 +35,7 @@ class CacheManager
      * @param ParamResolver     $params
      * @param string            $sourceRoot
      * @param int               $permissions
+     * @param int               $defaultQuality
      */
     public function __construct(
         CachePathResolver $cachePathResolver,
@@ -41,7 +44,8 @@ class CacheManager
         Filesystem $filesystem,
         ParamResolver $params,
         $sourceRoot,
-        $permissions
+        $permissions,
+        $defaultQuality
     ) {
         $this->cachePathResolver = $cachePathResolver;
         $this->params            = $params;
@@ -50,6 +54,7 @@ class CacheManager
         $this->filesystem        = $filesystem;
         $this->sourceRoot        = $sourceRoot;
         $this->permissions       = $permissions;
+        $this->defaultQuality    = $defaultQuality;
     }
 
     /**
@@ -105,9 +110,8 @@ class CacheManager
             }
         }
 
-        // TODO: get rid of hard-coded quality
         $options = [
-            'quality' => $this->filterManager->getOption($filter, 'quality', 100),
+            'quality' => $this->filterManager->getOption($filter, 'quality', $this->defaultQuality),
             'format'  => $this->filterManager->getOption($filter, 'format', null),
         ];
 
