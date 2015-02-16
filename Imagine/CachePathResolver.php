@@ -56,26 +56,38 @@ class CachePathResolver
     public function getBrowserPath($path, $filter, $absolute = false)
     {
         $realPath = realpath($this->manager->getOption($filter, 'source_root', $this->sourceRoot) . $path);
-
-        $path = ltrim($path, '/');
-        $name = '_imagine_' . $filter . $this->params->getRouteSuffix();
-        $uri  = $this->router->generate($name, ['path' => $path], $absolute);
-        $uri  = str_replace(urlencode($path), urldecode($path), $uri);
-
-        // TODO: find better way then this hack.
-        // This is required if we keep assets on separate [sub]domain or we use base non-root URL for them.
-        $prefix  = preg_quote($this->params->getCachePrefix(), '#');
-        $pattern = sprintf('#^((?:[a-z]+:)?//.*?)?/\w+[.]php(/%s.*?)$#i', $prefix);
-        if (preg_match($pattern, $uri, $m)) {
-            $uri = $m[1] . $m[2];
-        }
-
-        $cached = realpath($this->params->getWebRoot(false) . $uri);
+        $uri      = $this->findCachedUri($path, $filter, $absolute);
+        $cached   = $this->findCachedFile($uri);
 
         if (file_exists($cached) && !is_dir($cached) && filemtime($realPath) > filemtime($cached)) {
             unlink($cached);
         }
 
         return $uri;
+    }
+
+    /** @internal */
+    private function findCachedUri($path, $filter, $absolute)
+    {
+        $path = ltrim($path, '/');
+        $name = '_imagine_' . $filter . $this->params->getRouteSuffix();
+        $uri  = $this->router->generate($name, ['path' => $path], $absolute);
+
+        return str_replace(urlencode($path), urldecode($path), $uri);
+    }
+
+    /** @internal */
+    private function findCachedFile($uri)
+    {
+        // TODO: find better way then this hack.
+        // This is required if we keep assets on separate [sub]domain or we use base non-root URL for them.
+        $cachedPath = $uri;
+        $prefix     = preg_quote($this->params->getCachePrefix(), '#');
+        $pattern    = sprintf('#^((?:[a-z]+:)?//.*?)?/\w+[.]php(/%s.*?)$#i', $prefix);
+        if (preg_match($pattern, $uri, $m)) {
+            $cachedPath = $m[1] . $m[2];
+        }
+
+        return realpath($this->params->getWebRoot() . $cachedPath);
     }
 }
