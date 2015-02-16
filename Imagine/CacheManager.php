@@ -102,7 +102,14 @@ class CacheManager
             // Make sure source path is an image
             new ImageFile($sourcePath, false);
 
-            $this->filesystem->copy($sourcePath, $cachedPath);
+            try {
+                // Do not pollute the space (don't copy anything; symlink is just fine)
+                $this->filesystem->symlink($sourcePath, $cachedPath);
+            } catch (IOException $e) {
+                // In case we were not able to create symlink we should return source path.
+                // This means we'll be back here, but at least we'll not be polluting space with useless copies.
+                return $sourcePath;
+            }
 
             return $cachedPath;
         }
