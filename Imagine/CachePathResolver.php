@@ -49,6 +49,32 @@ class CachePathResolver
     }
 
     /**
+     * Get real path to file for given filter
+     *
+     * @param string $path
+     * @param string $filter
+     *
+     * @return string|null
+     */
+    public function getRealPath($path, $filter)
+    {
+        return realpath($this->manager->getOption($filter, 'source_root', $this->sourceRoot) . $path) ? : null;
+    }
+
+    /**
+     * Get cached path to file for given filter
+     *
+     * @param string $path
+     * @param string $filter
+     *
+     * @return null|string
+     */
+    public function getCachedPath($path, $filter)
+    {
+        return $this->findCachedFile($this->findCachedUri($path, $filter, false), false);
+    }
+
+    /**
      * Gets filtered path for rendering in the browser
      *
      * @param string  $path
