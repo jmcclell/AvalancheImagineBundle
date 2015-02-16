@@ -56,6 +56,9 @@ class CacheManager
 
         $browserPath = urldecode($this->cachePathResolver->getBrowserPath($path, $filter));
 
+        (0 === strpos($browserPath, '//')) && ($browserPath = 'scheme:' . $browserPath);
+        strpos($browserPath, '://') && ($browserPath = parse_url($browserPath, PHP_URL_PATH));
+
         if (!empty($basePath) && 0 === strpos($browserPath, $basePath)) {
             $browserPath = substr($browserPath, strlen($basePath));
         }
