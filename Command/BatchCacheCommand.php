@@ -9,6 +9,7 @@ use Avalanche\Bundle\ImagineBundle\Imagine\ParamResolver;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand as BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -20,7 +21,7 @@ class BatchCacheCommand extends BaseCommand
             ->setName('imagine:batch-cache')
             ->setDescription('Perform a caching process on a set of files')
             ->addArgument('files', InputArgument::IS_ARRAY, 'A glob patterns or literal pathnames')
-            ->addOption('force', InputArgument::OPTIONAL, 'Flag that will force to regenerate already cached images')
+            ->addOption('force', null, InputOption::VALUE_NONE, 'Flag that will force to regenerate already cached images')
             ->setHelp(
                 <<<EOF
 The <info>%command.name%</info> command performs caching on all listed images:
