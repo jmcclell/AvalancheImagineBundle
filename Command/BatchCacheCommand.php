@@ -73,7 +73,7 @@ EOF
                 }
 
                 $path = substr($file, $prefixLength);
-                if ($cached = $cachePath->getCachedPath($path, $filter, true)) {
+                if (!$input->getOption('force') && $cachePath->getCachedPath($path, $filter, true)) {
                     ++$skipped[$filter];
                     continue;
                 }
