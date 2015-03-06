@@ -28,7 +28,7 @@ class AvalancheImagineExtension extends Extension
 
         if (isset($config['hosts']) && (isset($config['cache_prefix']) || isset($config['web_root']))) {
             $message = 'You can only use "imagine.hosts" or ("imagine.cache_prefix" and "imagine.web_root"); not both';
-            throw new \InvalidActionException($message);
+            throw new InvalidArgumentException($message);
         }
 
         if (!isset($config['hosts'])) {
