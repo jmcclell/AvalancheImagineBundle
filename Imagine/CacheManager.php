@@ -130,6 +130,11 @@ class CacheManager
 
     private function ensureDirectoryExists($dir)
     {
+        // Do not perform directory creation for stream wrappers.
+        if (strpos($dir, '://')) {
+            return;
+        }
+
         if (!is_dir($dir)) {
             try {
                 $this->filesystem->mkdir($dir);
