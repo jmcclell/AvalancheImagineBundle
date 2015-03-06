@@ -83,15 +83,7 @@ class CacheManager
             return null;
         }
 
-        $dir = pathinfo($cachedPath, PATHINFO_DIRNAME);
-
-        if (!is_dir($dir)) {
-            try {
-                $this->filesystem->mkdir($dir);
-            } catch (IOException $e) {
-                throw new RuntimeException(sprintf('Could not create directory %s', $dir), 0, $e);
-            }
-        }
+        $this->ensureDirectoryExists(pathinfo($cachedPath, PATHINFO_DIRNAME));
 
         try {
             $image = $this->imagine->open($sourcePath);
@@ -134,5 +126,16 @@ class CacheManager
         }
 
         return $cachedPath;
+    }
+
+    private function ensureDirectoryExists($dir)
+    {
+        if (!is_dir($dir)) {
+            try {
+                $this->filesystem->mkdir($dir);
+            } catch (IOException $e) {
+                throw new RuntimeException(sprintf('Could not create directory %s', $dir), 0, $e);
+            }
+        }
     }
 }
