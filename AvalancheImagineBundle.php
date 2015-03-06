@@ -14,7 +14,8 @@ class AvalancheImagineBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new LoadersCompilerPass())
-            ->addCompilerPass(new CreateCacheDirectoriesCompilerPass(), PassConfig::TYPE_AFTER_REMOVING);
+        $container->addCompilerPass(new LoadersCompilerPass());
+        // Disable create cache directories for now; it's not needed anyway (structure is being created on the run).
+//            ->addCompilerPass(new CreateCacheDirectoriesCompilerPass(), PassConfig::TYPE_AFTER_REMOVING);
     }
 }
