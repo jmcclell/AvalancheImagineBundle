@@ -135,12 +135,14 @@ class CacheManager
             return;
         }
 
-        if (!is_dir($dir)) {
-            try {
-                $this->filesystem->mkdir($dir);
-            } catch (IOException $e) {
-                throw new RuntimeException(sprintf('Could not create directory %s', $dir), 0, $e);
-            }
+        if (is_dir($dir)) {
+            return;
+        }
+
+        try {
+            $this->filesystem->mkdir($dir);
+        } catch (IOException $e) {
+            throw new RuntimeException(sprintf('Could not create directory %s', $dir), 0, $e);
         }
     }
 }
