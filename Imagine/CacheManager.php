@@ -113,17 +113,7 @@ class CacheManager
         // Important! optipng filter returns an instance of ImageAssetWrapper.
         $this->filterManager->getFilter($filter)->apply($image)->save($cachedPath, $options);
 
-        try {
-            $this->filesystem->chmod($cachedPath, $this->permissions);
-        } catch (IOException $e) {
-            try {
-                $this->filesystem->remove($cachedPath);
-            } catch (IOException $ee) {
-            }
-
-            $message = sprintf('Could not set permissions %s on image saved in %s', $this->permissions, $cachedPath);
-            throw new RuntimeException($message, 0, $e);
-        }
+        $this->ensureFilePermissions($cachedPath);
 
         return $cachedPath;
     }
@@ -143,6 +133,21 @@ class CacheManager
             $this->filesystem->mkdir($dir);
         } catch (IOException $e) {
             throw new RuntimeException(sprintf('Could not create directory %s', $dir), 0, $e);
+        }
+    }
+
+    private function ensureFilePermissions($file)
+    {
+        try {
+            $this->filesystem->chmod($file, $this->permissions);
+        } catch (IOException $e) {
+            try {
+                $this->filesystem->remove($file);
+            } catch (IOException $ee) {
+            }
+
+            $message = sprintf('Could not set permissions %s on image saved in %s', $this->permissions, $file);
+            throw new RuntimeException($message, 0, $e);
         }
     }
 }
