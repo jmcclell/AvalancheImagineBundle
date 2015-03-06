@@ -138,6 +138,11 @@ class CacheManager
 
     private function ensureFilePermissions($file)
     {
+        // Do not perform directory creation for stream wrappers.
+        if (strpos($file, '://')) {
+            return;
+        }
+
         try {
             $this->filesystem->chmod($file, $this->permissions);
         } catch (IOException $e) {
