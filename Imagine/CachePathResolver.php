@@ -145,7 +145,8 @@ class CachePathResolver
             return $cached;
         }
 
-        $cached = realpath($cached);
+        // Normalize path only if it's required (DO NOT do this for remote storage like S3)
+        (false !== strpos($cached, '/../')) && $cached = realpath($cached);
 
         return $cached && file_exists($cached) && !is_dir($cached) ? $cached : null;
     }
