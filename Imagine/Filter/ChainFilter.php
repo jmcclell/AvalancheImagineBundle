@@ -2,9 +2,9 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter;
 
+use Imagine\Exception\InvalidArgumentException;
 use Imagine\Filter\FilterInterface;
 use Imagine\Image\ImageInterface;
-use InvalidArgumentException;
 
 class ChainFilter implements FilterInterface
 {

@@ -2,10 +2,10 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter;
 
+use Imagine\Exception\InvalidArgumentException;
 use Imagine\Filter\FilterInterface;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
-use InvalidArgumentException;
 
 class PasteFilter implements FilterInterface
 {

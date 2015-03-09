@@ -28,7 +28,7 @@ class ImageFile extends File
      *
      * @return string
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getContents()
     {
@@ -38,7 +38,7 @@ class ImageFile extends File
 
         if (false === $content) {
             $error = error_get_last();
-            throw new \RuntimeException($error['message']);
+            throw new RuntimeException($error['message']);
         }
 
         return $content;

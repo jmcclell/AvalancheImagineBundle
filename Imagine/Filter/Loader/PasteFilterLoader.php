@@ -3,8 +3,8 @@
 namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\PasteFilter;
+use Imagine\Exception\InvalidArgumentException;
 use Imagine\Image\ImagineInterface;
-use InvalidArgumentException;
 
 class PasteFilterLoader implements LoaderInterface
 {
