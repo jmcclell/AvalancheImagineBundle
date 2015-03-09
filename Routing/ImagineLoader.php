@@ -2,6 +2,7 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Routing;
 
+use Avalanche\Bundle\ImagineBundle\Exception\UnsupportedOptionException;
 use Avalanche\Bundle\ImagineBundle\Imagine\ParamResolver;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
@@ -29,6 +30,8 @@ class ImagineLoader extends Loader
 
         foreach ($this->filters as $filter => $options) {
             if (isset($options['path'])) {
+                // FIXME: "path" option is not supported at the moment
+                throw new UnsupportedOptionException('Unfortunately "path" option is not yet supported.');
                 $this->addRoute($routes, $filter, '/' . trim($options['path'], '/') . '/{path}');
 
                 return;
