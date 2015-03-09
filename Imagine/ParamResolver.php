@@ -2,11 +2,15 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Imagine;
 
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Templating\Helper\CoreAssetsHelper;
 
 class ParamResolver
 {
+    /** @var Router */
+    private $router;
     /** @var RequestContext */
     private $context;
     /** @var array */
@@ -29,13 +33,20 @@ class ParamResolver
     /**
      * Constructs cache path resolver with a given web root and cache prefix
      *
-     * @param array          $hosts
-     * @param RequestContext $context
+     * @param array            $hosts
+     * @param Router           $router
+     * @param RequestContext   $context
+     * @param CoreAssetsHelper $assets
      */
-    public function __construct(array $hosts, RequestContext $context = null, CoreAssetsHelper $assets = null)
-    {
-        $this->context = $context;
+    public function __construct(
+        array $hosts,
+        Router $router,
+        RequestContext $context = null,
+        CoreAssetsHelper $assets = null
+    ) {
         $this->hosts   = $hosts;
+        $this->router  = $router;
+        $this->context = $context;
         $this->assets  = $assets;
     }
 
@@ -177,5 +188,29 @@ class ParamResolver
         }
 
         return $this->assetsHost = $host;
+    }
+
+    // FIXME: shady way of dealing with remote resource
+    public function generateUrl($name, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        $uri  = $this->router->generate($name, $parameters, $referenceType);
+        $host = parse_url(0 === strpos($uri, '//') ? 's:' . $uri : $uri, PHP_URL_HOST);
+
+        // Need to regenerate URI as we might end up with different ports set
+        if (isset($this->hosts[$host]) && isset($this->hosts[$host]['ports'])) {
+            $map       = ['http' => 'HttpPort', 'ssl' => 'HttpsPort'];
+            $ports     = $this->hosts[$host]['ports'];
+            $originals = [];
+            foreach ($map as $key => $method) {
+                $originals[$key] = $this->router->getContext()->{'get' . $method}();
+                isset($ports[$key]) && $this->router->getContext()->{'set' . $method}($ports[$key]);
+            }
+            $uri = $this->router->generate($name, $parameters, $referenceType);
+            foreach ($map as $key => $method) {
+                $this->router->getContext()->{'set' . $method}($originals[$key]);
+            }
+        }
+
+        return $uri;
     }
 }
