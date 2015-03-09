@@ -34,7 +34,7 @@ class ImagineLoader extends Loader
                 throw new UnsupportedOptionException('Unfortunately "path" option is not yet supported.');
                 $this->addRoute($routes, $filter, '/' . trim($options['path'], '/') . '/{path}');
 
-                return;
+                continue;
             }
 
             foreach ($this->cacheParams->getRouteOptions() as $host => $cachePrefix) {
