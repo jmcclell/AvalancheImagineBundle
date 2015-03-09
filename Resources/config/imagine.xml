@@ -64,6 +64,7 @@
 
         <service id="imagine.param.resolver" class="%imagine.param.resolver.class%">
             <argument>%imagine.hosts%</argument>
+            <argument type="service" id="router" />
             <argument type="service" id="router.request_context" on-invalid="null" strict="false" />
             <argument type="service" id="templating.helper.assets" on-invalid="null" strict="false" />
         </service>
