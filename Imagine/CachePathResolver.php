@@ -114,8 +114,7 @@ class CachePathResolver
 
         $path = ltrim($path, '/');
         $name = '_imagine_' . $filter . $this->params->getRouteSuffix($assetsHost);
-        // FIXME: $uri will contain invalid URL in case we're using different ports for WEBSITE and ASSETS.
-        $uri  = $this->router->generate($name, ['path' => $path], $absolute);
+        $uri  = $this->params->generateUrl($name, ['path' => $path], $absolute);
 
         $prefix  = preg_quote($this->params->getCachePrefix($assetsHost), '#');
         if ($assetsHost) {
