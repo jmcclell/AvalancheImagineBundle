@@ -56,7 +56,7 @@ class AvalancheImagineExtension extends Extension
         return $config;
     }
 
-    function getAlias()
+    public function getAlias()
     {
         return 'avalanche_imagine';
     }
