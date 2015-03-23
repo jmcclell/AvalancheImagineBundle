@@ -60,4 +60,15 @@ class AvalancheImagineExtension extends Extension
     {
         return 'avalanche_imagine';
     }
+
+    private function standardizeHosts(array $hosts)
+    {
+        foreach ($hosts as $name => &$options) {
+            // Remove slashes from both sides.
+            $options['cache_prefix'] = trim($options['cache_prefix'], '/\\');
+            // Remove slashes from the rhs.
+            $options['web_root']     = rtrim($options['web_root'], '/\\');
+        }
+        unset($options);
+    }
 }
