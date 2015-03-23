@@ -72,5 +72,7 @@ class AvalancheImagineExtension extends Extension
             $options['web_root']     = rtrim($options['web_root'], '/\\');
         }
         unset($options);
+
+        return $hosts;
     }
 }
