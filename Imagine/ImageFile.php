@@ -43,4 +43,39 @@ class ImageFile extends File
 
         return $content;
     }
+
+    /** {inheritdoc} */
+    public function getMimeType()
+    {
+        $level = error_reporting(0);
+        $type  = parent::getMimeType();
+        error_reporting($level);
+
+        if (false === $type) {
+            if (false === strpos($this->getPathname(), '://')) {
+                $error = error_get_last();
+                throw new RuntimeException($error['message']);
+            }
+
+            // Make MIME assumption based on their extension for remote resources.
+            if (preg_match('/[.](png|gif|jge?g|ico)$/', $this->getPathname(), $m)) {
+                $type = $this->createMime($m[1]);
+            }
+        }
+
+        return $type;
+    }
+
+    private function createMime($extension)
+    {
+        $map = [
+            'jpg'  => 'jpeg',
+            'jpeg' => 'jpeg',
+            'gif'  => 'gif',
+            'png'  => 'png',
+            'ico'  => 'vnd.microsoft.icon',
+        ];
+
+        return isset($map[$extension]) ? sprintf('image/%s', $map[$extension]) : false;
+    }
 }
