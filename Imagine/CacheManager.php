@@ -79,7 +79,7 @@ class CacheManager
             return $cachedPath;
         }
 
-        if (!is_file($sourcePath = $this->cachePathResolver->getRealPath($path, $filter))) {
+        if (!$sourcePath = $this->cachePathResolver->getRealPath($path, $filter)) {
             return null;
         }
 

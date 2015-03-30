@@ -58,7 +58,9 @@ class CachePathResolver
      */
     public function getRealPath($path, $filter)
     {
-        return realpath($this->manager->getOption($filter, 'source_root', $this->sourceRoot) . $path) ? : null;
+        $fullPath = $this->manager->getOption($filter, 'source_root', $this->sourceRoot) . $path;
+
+        return $this->normalizeFilePath($fullPath);
     }
 
     /**
@@ -144,9 +146,14 @@ class CachePathResolver
             return $cached;
         }
 
-        // Normalize path only if it's required (DO NOT do this for remote storage like S3)
-        (false === strpos($cached, '://')) && ($cached = realpath($cached));
+        return $this->normalizeFilePath($cached);
+    }
 
-        return $cached && file_exists($cached) && !is_dir($cached) ? $cached : null;
+    private function normalizeFilePath($path)
+    {
+        // Normalize path only if it's required (DO NOT do this for remote storage like S3)
+        (false === strpos($path, '://')) && ($path = realpath($path));
+
+        return $path && is_file($path) ? $path : null;
     }
 }
