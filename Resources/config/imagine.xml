@@ -76,6 +76,7 @@
             <argument>%imagine.source_root%</argument>
             <argument type="service" id="router.request_context" on-invalid="null" strict="false" />
             <argument type="service" id="templating.helper.assets" on-invalid="null" strict="false" />
+            <argument>%imagine.default_front_controller%</argument>
         </service>
 
         <service id="imagine.cache.manager" class="%imagine.cache.manager.class%">
