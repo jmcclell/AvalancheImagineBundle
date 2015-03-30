@@ -21,6 +21,8 @@ class CachePathResolver
     private $context;
     /** @var CoreAssetsHelper */
     private $assets;
+    /** @var string */
+    private $defaultFrontController;
 
     /**
      * Constructs cache path resolver with a given web root and cache prefix
@@ -38,7 +40,8 @@ class CachePathResolver
         RouterInterface $router,
         $sourceRoot,
         RequestContext $context = null,
-        CoreAssetsHelper $assets = null
+        CoreAssetsHelper $assets = null,
+        $defaultFrontController
     ) {
         $this->manager    = $manager;
         $this->params     = $params;
@@ -46,6 +49,9 @@ class CachePathResolver
         $this->context    = $context;
         $this->assets     = $assets;
         $this->sourceRoot = $sourceRoot;
+        // In some cases this may be required to force cached image generation.
+        // I.e. front controller is not handling any of assets URI.
+        $this->defaultFrontController = $defaultFrontController;
     }
 
     /**
@@ -123,6 +129,11 @@ class CachePathResolver
             $pattern = sprintf('#^((?:[a-z]+:)?//.*?)?(?:/\w+[.]php)?(/%s.*?)$#i', $prefix);
             if (preg_match($pattern, $uri, $m)) {
                 $uri = $m[1] . $m[2];
+            }
+        } elseif (!empty($this->defaultFrontController)) {
+            $pattern = sprintf('#^((?:[a-z]+:)?//.*?)?(/\w+[.]php)?(/%s.*?)$#i', $prefix);
+            if (preg_match($pattern, $uri, $m)) {
+                empty($m[2]) && ($uri = $m[1] . '/' . $this->defaultFrontController . $m[3]);
             }
         }
 
