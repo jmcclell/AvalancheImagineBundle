@@ -42,7 +42,15 @@ class AvalancheImagineExtension extends Extension
 
         $config['hosts'] = $this->standardizeHosts($config['hosts']);
 
-        foreach (['source_root', 'permissions', 'default_quality', 'filters', 'not_found_images', 'hosts'] as $key) {
+        if (!isset($config['default_front_controller'])) {
+            $config['default_front_controller'] = '';
+        }
+
+        $parameters = [
+            'source_root', 'permissions', 'default_quality', 'filters', 'not_found_images', 'hosts',
+            'default_front_controller',
+        ];
+        foreach ($parameters as $key) {
             isset($config[$key]) && $container->setParameter('imagine.' . $key, $config[$key]);
         }
     }
