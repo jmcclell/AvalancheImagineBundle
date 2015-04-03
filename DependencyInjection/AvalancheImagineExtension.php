@@ -46,9 +46,13 @@ class AvalancheImagineExtension extends Extension
             $config['default_front_controller'] = '';
         }
 
+        if (!isset($config['on_the_fly'])) {
+            $config['on_the_fly'] = true;
+        }
+
         $parameters = [
             'source_root', 'permissions', 'default_quality', 'filters', 'not_found_images', 'hosts',
-            'default_front_controller',
+            'default_front_controller', 'on_the_fly',
         ];
         foreach ($parameters as $key) {
             isset($config[$key]) && $container->setParameter('imagine.' . $key, $config[$key]);
