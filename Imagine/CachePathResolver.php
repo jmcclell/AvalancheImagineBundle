@@ -83,6 +83,11 @@ class CachePathResolver
         return $this->findCachedFile($this->findCachedUri($path, $filter, false), $evaluate);
     }
 
+    public function getCachedUri($path, $filter, $absolute = false)
+    {
+        return $this->findCachedUri($path, $filter, $absolute);
+    }
+
     /**
      * Gets filtered path for rendering in the browser
      *
