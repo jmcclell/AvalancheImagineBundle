@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
 class BatchCacheCommand extends BaseCommand
@@ -52,6 +53,11 @@ EOF
 
         $files = [];
         foreach ($input->getArgument('files') as $pattern) {
+            if (false !== strpos($pattern, '://')) {
+                $message = '%s command works only with local filesystem; "%s" given.';
+                throw new IOException(sprintf($message, $this->getName(), $pattern));
+            }
+
             $files = array_merge($files, glob($pattern, GLOB_BRACE | GLOB_NOSORT));
         }
         $files = array_unique(array_filter(array_map('realpath', $files)));
