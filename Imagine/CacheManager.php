@@ -57,15 +57,16 @@ class CacheManager
     /**
      * Forces image caching and returns path to cached image.
      *
-     * @param string $basePath Deprecated parameter
-     * @param string $path
-     * @param string $filter
+     * @param string  $basePath Deprecated parameter
+     * @param string  $path
+     * @param string  $filter
+     * @param boolean $force
      *
      * @return string|null
      *
      * @throws RuntimeException
      */
-    public function cacheImage($basePath, $path, $filter)
+    public function cacheImage($basePath, $path, $filter, $force = false)
     {
         $path = '/' . ltrim($path, '/');
 
@@ -75,7 +76,7 @@ class CacheManager
         }
 
         // if the file has already been cached, just return path
-        if (is_file($cachedPath)) {
+        if (!$force && is_file($cachedPath)) {
             return $cachedPath;
         }
 
