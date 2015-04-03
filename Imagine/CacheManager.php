@@ -84,7 +84,7 @@ class CacheManager
             return null;
         }
 
-        $this->ensureDirectoryExists(pathinfo($cachedPath, PATHINFO_DIRNAME));
+        $this->ensureDirectoryExists($cachedPath);
 
         try {
             $image = $this->imagine->open($sourcePath);
@@ -119,12 +119,14 @@ class CacheManager
         return $cachedPath;
     }
 
-    private function ensureDirectoryExists($dir)
+    private function ensureDirectoryExists($path)
     {
         // Do not perform directory creation for stream wrappers.
-        if (strpos($dir, '://')) {
+        if (strpos($path, '://')) {
             return;
         }
+
+        $dir = pathinfo($path, PATHINFO_DIRNAME);
 
         if (is_dir($dir)) {
             return;
