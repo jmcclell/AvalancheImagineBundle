@@ -11,10 +11,13 @@ class ImagineHelper extends Helper
      * @var CachePathResolver
      */
     private $cachePathResolver;
+    /** @var boolean */
+    private $onTheFly;
 
-    public function __construct(CachePathResolver $cachePathResolver)
+    public function __construct(CachePathResolver $cachePathResolver, $onTheFly)
     {
         $this->cachePathResolver = $cachePathResolver;
+        $this->onTheFly          = $onTheFly;
     }
 
     /**
@@ -28,7 +31,9 @@ class ImagineHelper extends Helper
      */
     public function filter($path, $filter, $absolute = false)
     {
-        return $this->cachePathResolver->getBrowserPath($path, $filter, $absolute);
+        return $this->onTheFly
+            ? $this->cachePathResolver->getBrowserPath($path, $filter, $absolute)
+            : $this->cachePathResolver->getCachedUri($path, $filter, $absolute);
     }
 
     /**

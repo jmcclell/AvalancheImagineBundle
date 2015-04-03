@@ -137,11 +137,13 @@
         <service id="imagine.twig.extension" class="%imagine.twig.extension.class%" public="false">
             <tag name="twig.extension" />
             <argument type="service" id="imagine.cache.path.resolver" />
+            <argument>%imagine.on_the_fly%</argument>
         </service>
 
         <service id="imagine.templating.helper" class="%imagine.templating.helper.class%">
             <tag name="templating.helper" alias="imagine" />
             <argument type="service" id="imagine.cache.path.resolver" />
+            <argument>%imagine.on_the_fly%</argument>
         </service>
 
         <!-- Filter loaders -->

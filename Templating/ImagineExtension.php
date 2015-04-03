@@ -13,10 +13,13 @@ class ImagineExtension extends Twig_Extension
      * @var CachePathResolver
      */
     private $cachePathResolver;
+    /** @var boolean */
+    private $onTheFly;
 
-    public function __construct(CachePathResolver $cachePathResolver)
+    public function __construct(CachePathResolver $cachePathResolver, $onTheFly)
     {
         $this->cachePathResolver = $cachePathResolver;
+        $this->onTheFly          = $onTheFly;
     }
 
     /**
@@ -50,7 +53,9 @@ class ImagineExtension extends Twig_Extension
      */
     public function applyFilter($path, $filter, $absolute = false)
     {
-        return $this->cachePathResolver->getBrowserPath($path, $filter, $absolute);
+        return $this->onTheFly
+            ? $this->cachePathResolver->getBrowserPath($path, $filter, $absolute)
+            : $this->cachePathResolver->getCachedUri($path, $filter, $absolute);
     }
 
     /**
