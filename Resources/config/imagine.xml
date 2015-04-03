@@ -20,6 +20,7 @@
         <parameter key="imagine.cache.path.resolver.class">Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver</parameter>
         <parameter key="imagine.cache.manager.class">Avalanche\Bundle\ImagineBundle\Imagine\CacheManager</parameter>
         <parameter key="imagine.param.resolver.class">Avalanche\Bundle\ImagineBundle\Imagine\ParamResolver</parameter>
+        <parameter key="imagine.cache.reloader.class">Avalanche\Bundle\ImagineBundle\Imagine\CacheReloader</parameter>
 
         <!-- Controller class -->
 
@@ -91,6 +92,12 @@
 
         <service id="imagine.filter.manager" class="%imagine.filter.manager.class%">
             <argument>%imagine.filters%</argument>
+        </service>
+
+        <service id="imagine.cache.reloader" class="%imagine.cache.reloader.class%">
+            <argument>%imagine.source_root%</argument>
+            <argument type="service" id="imagine.cache.manager" />
+            <argument type="service" id="imagine.filter.manager" />
         </service>
 
         <!-- Controller -->
