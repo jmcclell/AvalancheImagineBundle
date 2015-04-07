@@ -15,11 +15,14 @@ class ImagineExtension extends Twig_Extension
     private $cachePathResolver;
     /** @var boolean */
     private $onTheFly;
+    /** @var string[] */
+    private $notFoundImages;
 
-    public function __construct(CachePathResolver $cachePathResolver, $onTheFly)
+    public function __construct(CachePathResolver $cachePathResolver, $onTheFly = true, array $notFoundImages = [])
     {
         $this->cachePathResolver = $cachePathResolver;
         $this->onTheFly          = $onTheFly;
+        $this->notFoundImages    = $notFoundImages;
     }
 
     /**
@@ -53,9 +56,11 @@ class ImagineExtension extends Twig_Extension
      */
     public function applyFilter($path, $filter, $absolute = false)
     {
-        return $this->onTheFly
+        $uri = $this->onTheFly
             ? $this->cachePathResolver->getBrowserPath($path, $filter, $absolute)
             : $this->cachePathResolver->getCachedUri($path, $filter, $absolute);
+
+        return $uri ? : (isset($this->notFoundImages[$filter]) ? $this->notFoundImages[$filter] : null);
     }
 
     /**
