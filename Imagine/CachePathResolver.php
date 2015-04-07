@@ -85,7 +85,7 @@ class CachePathResolver
 
     public function getCachedUri($path, $filter, $absolute = false)
     {
-        return $this->findCachedUri($path, $filter, $absolute);
+        return empty($path) ? null : $this->findCachedUri($path, $filter, $absolute);
     }
 
     /**
@@ -99,6 +99,10 @@ class CachePathResolver
      */
     public function getBrowserPath($path, $filter, $absolute = false)
     {
+        if (empty($path)) {
+            return null;
+        }
+
         $uri    = $this->findCachedUri($path, $filter, $absolute);
         $cached = $this->findCachedFile($uri, true);
 
