@@ -50,6 +50,15 @@ class AvalancheImagineExtension extends Extension
             $config['on_the_fly'] = true;
         }
 
+        if (!isset($config['not_found_images'])) {
+            $config['not_found_images'] = [];
+        } elseif(is_string($config['not_found_images'])) {
+            $path = $config['not_found_images'];
+            foreach ($config['filters'] as $name => $filter) {
+                $config['not_found_images'][$name] = $path;
+            }
+        }
+
         $parameters = [
             'source_root', 'permissions', 'default_quality', 'filters', 'not_found_images', 'hosts',
             'default_front_controller', 'on_the_fly',
