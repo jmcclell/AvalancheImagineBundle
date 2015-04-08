@@ -80,7 +80,7 @@ class CachePathResolver
      */
     public function getCachedPath($path, $filter, $evaluate = false)
     {
-        return $this->findCachedFile($this->findCachedUri($path, $filter, false), $evaluate);
+        return empty($path) ? null : $this->findCachedFile($this->findCachedUri($path, $filter, false), $evaluate);
     }
 
     public function getCachedUri($path, $filter, $absolute = false)
