@@ -3,6 +3,8 @@
 namespace Avalanche\Bundle\ImagineBundle\Imagine;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
+use Avalanche\Bundle\ImagineBundle\Imagine\Image\ImageAssetWrapper;
+use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Exception\RuntimeException;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -112,7 +114,17 @@ class CacheManager
         ];
 
         // Important! optipng filter returns an instance of ImageAssetWrapper.
-        $this->filterManager->getFilter($filter)->apply($image)->save($cachedPath, $options);
+        /** @var ImageInterface|ImageAssetWrapper $image */
+        $image = $this->filterManager->getFilter($filter)->apply($image);
+        /** @var resource $context */
+        if ($context = $this->findStreamContext($cachedPath, $filter)) {
+            $tmpPath = tempnam(sys_get_temp_dir(), 'avalanche-cache-manager-proxy-');
+            $image->save($tmpPath, $options);
+            copy($tmpPath, $cachedPath, $context);
+            unlink($tmpPath);
+        } else {
+            $image->save($cachedPath, $options);
+        }
 
         $this->ensureFilePermissions($cachedPath);
 
