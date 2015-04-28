@@ -119,6 +119,18 @@ class CacheManager
         return $cachedPath;
     }
 
+    private function findStreamContext($path, $filter)
+    {
+        if (false === $at = strpos($path, '://')) {
+            return null;
+        }
+
+        $contextName = substr($path, 0, $at);
+        $context     = $this->filterManager->getOption($filter, $contextName . '_context', null);
+
+        return is_array($context) ? stream_context_create([$contextName => $context]) : null;
+    }
+
     private function ensureDirectoryExists($path)
     {
         // Do not perform directory creation for stream wrappers.
