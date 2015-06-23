@@ -127,6 +127,10 @@ class CachePathResolver
     /** @internal */
     private function findCachedUri($path, $filter, $absolute, $generate = false)
     {
+        if ($this->skip($path, $filter)) {
+            return $this->assets->getUrl($path);
+        }
+
         $assetsHost = !$generate;
 
         $path = ltrim($path, '/');
