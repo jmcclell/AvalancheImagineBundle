@@ -176,4 +176,19 @@ class CachePathResolver
 
         return $path && is_file($path) ? $path : null;
     }
+
+    private function skip($path, $filter)
+    {
+        if (!$skip = $this->manager->getOption($filter, 'skip')) {
+            return false;
+        }
+
+        foreach ((array)$skip as $regex) {
+            if (preg_match($regex, $path)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
