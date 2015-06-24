@@ -150,8 +150,8 @@ class ParamResolver
             } elseif (isset($this->hosts['default'][$key])) {
                 $this->{$field}[$host] = $this->hosts['default'][$key];
             } else {
-                $message = '%s parameter is required by AvalancheImagineBundle; define imagine.hosts.default.%s';
-                throw new \InvalidArgumentException(sprintf($message, $key, $key));
+                $message = '%1$s parameter is required by AvalancheImagineBundle; define either imagine.hosts.default.%1$s or imagine.hosts["%2$s"].%1$s';
+                throw new \InvalidArgumentException(sprintf($message, $key, $host));
             }
         }
     }
