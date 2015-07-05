@@ -131,6 +131,18 @@ class CacheManager
         return $cachedPath;
     }
 
+    public function removeCacheImage($path, $filter)
+    {
+        $path = '/' . ltrim($path, '/');
+
+        // if cache path cannot be determined, return 404
+        if (!$cachedPath = $this->cachePathResolver->getCachedPath($path, $filter)) {
+            return;
+        }
+
+        (!stream_is_local($cachedPath) || is_file($cachedPath)) && unlink($cachedPath);
+    }
+
     private function findStreamContext($path, $filter)
     {
         if (false === $at = strpos($path, '://')) {
