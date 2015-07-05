@@ -176,7 +176,7 @@ class CachePathResolver
     private function normalizeFilePath($path)
     {
         // Normalize path only if it's required (DO NOT do this for remote storage like S3)
-        (false === strpos($path, '://')) && ($path = realpath($path));
+        stream_is_local($path) && ($path = realpath($path));
 
         return $path && is_file($path) ? $path : null;
     }
