@@ -21,10 +21,11 @@ class CacheReloader
     {
         $paths = [];
 
+        stream_is_local($file) && ($file = realpath($file));
+
         foreach ($this->filterManager->getFilterNames() as $filter) {
             $prefix = $this->filterManager->getOption($filter, 'source_root', $this->sourceRoot);
             stream_is_local($prefix) && ($prefix = realpath($prefix));
-            stream_is_local($file) && ($file = realpath($file));
 
             if (0 !== strpos($file, $prefix)) {
                 continue;
