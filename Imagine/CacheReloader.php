@@ -17,11 +17,12 @@ class CacheReloader
         $this->filterManager = $filterManager;
     }
 
-    public function reloadFor($file, $force = false)
+    public function reloadFor($file, $force = false, $saveAs = null)
     {
         $paths = [];
 
         stream_is_local($file) && ($file = realpath($file));
+        $saveAs && stream_is_local($saveAs) && ($saveAs = realpath($saveAs));
 
         foreach ($this->filterManager->getFilterNames() as $filter) {
             $prefix = $this->filterManager->getOption($filter, 'source_root', $this->sourceRoot);
@@ -31,9 +32,14 @@ class CacheReloader
                 continue;
             }
 
-            $source = substr($file, strlen($prefix));
+            if ($saveAs && 0 !== strpos($saveAs, $prefix)) {
+                continue;
+            }
 
-            $paths[$filter] = $this->cacheManager->cacheImage('', $source, $filter, $force);
+            $source = substr($file, strlen($prefix));
+            $target = $saveAs ? substr($saveAs, strlen($prefix)) : null;
+
+            $paths[$filter] = $this->cacheManager->cacheImage('', $source, $filter, $force, $target);
         }
 
         return $paths;
