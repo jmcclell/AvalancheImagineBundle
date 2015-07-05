@@ -44,4 +44,24 @@ class CacheReloader
 
         return $paths;
     }
+
+    public function cleanupFor($file)
+    {
+        $paths = [];
+
+        stream_is_local($file) && ($file = realpath($file));
+
+        foreach ($this->filterManager->getFilterNames() as $filter) {
+            $prefix = $this->filterManager->getOption($filter, 'source_root', $this->sourceRoot);
+            stream_is_local($prefix) && ($prefix = realpath($prefix));
+
+            if (0 !== strpos($file, $prefix)) {
+                continue;
+            }
+
+            $this->cacheManager->removeCacheImage(substr($file, strlen($prefix)), $filter);
+        }
+
+        return $paths;
+    }
 }
