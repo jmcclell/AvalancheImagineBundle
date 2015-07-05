@@ -31,7 +31,9 @@ class CacheReloader
                 continue;
             }
 
-            $paths[$filter] = $this->cacheManager->cacheImage('', substr($file, strlen($prefix)), $filter, $force);
+            $source = substr($file, strlen($prefix));
+
+            $paths[$filter] = $this->cacheManager->cacheImage('', $source, $filter, $force);
         }
 
         return $paths;
