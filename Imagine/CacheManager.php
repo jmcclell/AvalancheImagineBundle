@@ -63,17 +63,19 @@ class CacheManager
      * @param string  $path
      * @param string  $filter
      * @param boolean $force
+     * @param string  $saveAs
      *
      * @return string|null
      *
      * @throws RuntimeException
      */
-    public function cacheImage($basePath, $path, $filter, $force = false)
+    public function cacheImage($basePath, $path, $filter, $force = false, $saveAs = null)
     {
-        $path = '/' . ltrim($path, '/');
+        $path   = '/' . ltrim($path, '/');
+        $saveAs = $saveAs ? '/' . ltrim($saveAs, '/') : $path;
 
         // if cache path cannot be determined, return 404
-        if (!$cachedPath = $this->cachePathResolver->getCachedPath($path, $filter)) {
+        if (!$cachedPath = $this->cachePathResolver->getCachedPath($saveAs, $filter)) {
             return null;
         }
 
