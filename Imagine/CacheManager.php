@@ -164,9 +164,7 @@ class CacheManager
             return;
         }
 
-        $dir = pathinfo($path, PATHINFO_DIRNAME);
-
-        if (is_dir($dir)) {
+        if (is_dir($dir = pathinfo($path, PATHINFO_DIRNAME))) {
             return;
         }
 
