@@ -53,7 +53,7 @@ EOF
 
         $files = [];
         foreach ($input->getArgument('files') as $pattern) {
-            if (false !== strpos($pattern, '://')) {
+            if (!stream_is_local($pattern)) {
                 $message = '%s command works only with local filesystem; "%s" given.';
                 throw new IOException(sprintf($message, $this->getName(), $pattern));
             }

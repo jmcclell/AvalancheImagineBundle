@@ -160,7 +160,7 @@ class CacheManager
     private function ensureDirectoryExists($path)
     {
         // Do not perform directory creation for stream wrappers.
-        if (strpos($path, '://')) {
+        if (!stream_is_local($path)) {
             return;
         }
 
@@ -180,7 +180,7 @@ class CacheManager
     private function ensureFilePermissions($file)
     {
         // Do not perform directory creation for stream wrappers.
-        if (strpos($file, '://')) {
+        if (!stream_is_local($file)) {
             return;
         }
 

@@ -52,7 +52,7 @@ class ImageFile extends File
         error_reporting($level);
 
         if (false === $type) {
-            if (false === strpos($this->getPathname(), '://')) {
+            if (stream_is_local($this->getPathname())) {
                 $error = error_get_last();
                 throw new RuntimeException($error['message']);
             }
