@@ -22,7 +22,7 @@ class CacheReloader
         $paths = [];
 
         stream_is_local($file) && ($file = realpath($file));
-        $saveAs && stream_is_local($saveAs) && ($saveAs = realpath($saveAs));
+        $saveAs && stream_is_local($saveAs) && ($saveAs = realpath(dirname($saveAs)) . '/' . basename($saveAs));
 
         foreach ($this->filterManager->getFilterNames() as $filter) {
             $prefix = $this->filterManager->getOption($filter, 'source_root', $this->sourceRoot);
@@ -49,7 +49,7 @@ class CacheReloader
     {
         $paths = [];
 
-        stream_is_local($file) && ($file = realpath($file));
+        stream_is_local($file) && ($file = realpath(dirname($file)) . '/' . basename($file));
 
         foreach ($this->filterManager->getFilterNames() as $filter) {
             $prefix = $this->filterManager->getOption($filter, 'source_root', $this->sourceRoot);
