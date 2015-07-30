@@ -5,7 +5,7 @@ namespace Avalanche\Bundle\ImagineBundle\Imagine;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Templating\Helper\CoreAssetsHelper;
+use Symfony\Component\Templating\Helper\AssetsHelper;
 
 class ParamResolver
 {
@@ -17,7 +17,7 @@ class ParamResolver
     private $hosts;
     /** @var boolean */
     private $compiled;
-    /** @var CoreAssetsHelper */
+    /** @var AssetsHelper */
     private $assets;
 
     /** @var string[] */
@@ -36,13 +36,13 @@ class ParamResolver
      * @param array            $hosts
      * @param Router           $router
      * @param RequestContext   $context
-     * @param CoreAssetsHelper $assets
+     * @param AssetsHelper $assets
      */
     public function __construct(
         array $hosts,
         Router $router,
         RequestContext $context = null,
-        CoreAssetsHelper $assets = null
+        /*AssetsHelper*/ $assets = null
     ) {
         $this->hosts   = $hosts;
         $this->router  = $router;

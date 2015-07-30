@@ -5,7 +5,7 @@ namespace Avalanche\Bundle\ImagineBundle\Imagine;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Templating\Helper\CoreAssetsHelper;
+use Symfony\Component\Templating\Helper\AssetsHelper;
 
 class CachePathResolver
 {
@@ -19,7 +19,7 @@ class CachePathResolver
     private $sourceRoot;
     /** @var RequestContext */
     private $context;
-    /** @var CoreAssetsHelper */
+    /** @var AssetsHelper */
     private $assets;
     /** @var string */
     private $defaultFrontController;
@@ -32,7 +32,7 @@ class CachePathResolver
      * @param RouterInterface  $router
      * @param string           $sourceRoot
      * @param RequestContext   $context
-     * @param CoreAssetsHelper $assets
+     * @param AssetsHelper     $assets
      */
     public function __construct(
         FilterManager $manager,
@@ -40,7 +40,7 @@ class CachePathResolver
         RouterInterface $router,
         $sourceRoot,
         RequestContext $context = null,
-        CoreAssetsHelper $assets = null,
+        /*AssetsHelper*/ $assets = null,
         $defaultFrontController
     ) {
         $this->manager    = $manager;
