@@ -47,7 +47,7 @@ class ImagineLoader extends Loader
 
     private function addRoute(RouteCollection $routes, $filter, $pattern, $host = '')
     {
-        $requirements = ['_method' => 'GET', 'filter' => '[A-z0-9_\-]*', 'path' => '.+'];
+        $requirements = ['_methods' => 'GET', 'filter' => '[A-z0-9_\-]*', 'path' => '.+'];
         $defaults     = ['_controller' => 'imagine.controller:filterAction'];
         $routeSuffix  = $host ? '_' . preg_replace('#[^a-z0-9]+#i', '_', $host) : '';
 
