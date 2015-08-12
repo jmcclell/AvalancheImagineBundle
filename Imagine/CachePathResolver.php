@@ -33,6 +33,7 @@ class CachePathResolver
      * @param string           $sourceRoot
      * @param RequestContext   $context
      * @param AssetsHelper     $assets
+     * @param string           $defaultFrontController
      */
     public function __construct(
         FilterManager $manager,
