@@ -24,9 +24,7 @@ class ImagineExtension extends Twig_Extension
         $this->notFoundImages = $notFoundImages;
     }
 
-    /**
-     * (non-PHPdoc)
-     */
+    /** (non-PHPdoc} */
     public function getFilters()
     {
         return [
@@ -34,9 +32,7 @@ class ImagineExtension extends Twig_Extension
         ];
     }
 
-    /**
-     * {non-PHPdoc}
-     */
+    /** {non-PHPdoc} */
     public function getFunctions()
     {
         return [
