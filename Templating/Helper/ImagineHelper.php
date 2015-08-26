@@ -33,11 +33,11 @@ class ImagineHelper extends Helper
      */
     public function filter($path, $filter, $absolute = false)
     {
-        $uri = $this->onTheFly
-            ? $this->cachePathResolver->getBrowserPath($path, $filter, $absolute)
-            : $this->cachePathResolver->getCachedUri($path, $filter, $absolute);
+        $uri = $this->useController()
+            ? $this->getCachePathResolver()->getBrowserPath($path, $filter, $absolute)
+            : $this->getCachePathResolver()->getCachedUri($path, $filter, $absolute);
 
-        return $uri ? : (isset($this->notFoundImages[$filter]) ? $this->notFoundImages[$filter] : null);
+        return $uri ? : $this->findNotFound($filter);
     }
 
     /** @return \Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver */
