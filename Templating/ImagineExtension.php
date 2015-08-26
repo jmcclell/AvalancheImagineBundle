@@ -2,27 +2,26 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Templating;
 
-use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Twig_Extension;
 use Twig_SimpleFilter;
 use Twig_SimpleFunction;
 
 class ImagineExtension extends Twig_Extension
 {
-    /**
-     * @var CachePathResolver
-     */
+    /** @var ContainerInterface */
+    private $container;
     private $cachePathResolver;
     /** @var boolean */
     private $onTheFly;
     /** @var string[] */
     private $notFoundImages;
 
-    public function __construct(CachePathResolver $cachePathResolver, $onTheFly = true, array $notFoundImages = [])
+    public function __construct(ContainerInterface $container, $onTheFly = true, array $notFoundImages = [])
     {
-        $this->cachePathResolver = $cachePathResolver;
-        $this->onTheFly          = $onTheFly;
-        $this->notFoundImages    = $notFoundImages;
+        $this->container      = $container;
+        $this->onTheFly       = $onTheFly;
+        $this->notFoundImages = $notFoundImages;
     }
 
     /**
@@ -63,9 +62,14 @@ class ImagineExtension extends Twig_Extension
         return $uri ? : (isset($this->notFoundImages[$filter]) ? $this->notFoundImages[$filter] : null);
     }
 
-    /**
-     * (non-PHPdoc)
-     */
+    /** @return \Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver */
+    protected function getCachePathResolver()
+    {
+        return $this->cachePathResolver
+            ?: ($this->cachePathResolver = $this->container->get('imagine.cache.path.resolver'));
+    }
+
+    /** (non-PHPdoc) */
     public function getName()
     {
         return 'imagine';
