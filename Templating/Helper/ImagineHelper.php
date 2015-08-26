@@ -52,4 +52,14 @@ class ImagineHelper extends Helper
     {
         return 'imagine';
     }
+
+    protected function useController()
+    {
+        return $this->onTheFly;
+    }
+
+    protected function findNotFound($filter)
+    {
+        return isset($this->notFoundImages[$filter]) ? $this->notFoundImages[$filter] : null;
+    }
 }
