@@ -7,16 +7,20 @@
 
         <!-- Configuration defaults -->
 
-        <parameter key="imagine.web_root">%kernel.root_dir%/../web</parameter>
         <parameter key="imagine.source_root">%kernel.root_dir%/../web</parameter>
-        <parameter key="imagine.cache_prefix">media/cache</parameter>
         <parameter key="imagine.filters" type="collection" />
+        <parameter key="imagine.permissions">0644</parameter>
+        <parameter key="imagine.default_quality">100</parameter>
+        <parameter key="imagine.not_found_images" type="collection" />
+        <parameter key="imagine.hosts" type="collection" />
 
         <!-- Utility classes -->
 
         <parameter key="imagine.filter.manager.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager</parameter>
         <parameter key="imagine.cache.path.resolver.class">Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver</parameter>
         <parameter key="imagine.cache.manager.class">Avalanche\Bundle\ImagineBundle\Imagine\CacheManager</parameter>
+        <parameter key="imagine.param.resolver.class">Avalanche\Bundle\ImagineBundle\Imagine\ParamResolver</parameter>
+        <parameter key="imagine.cache.reloader.class">Avalanche\Bundle\ImagineBundle\Imagine\CacheReloader</parameter>
 
         <!-- Controller class -->
 
@@ -49,15 +53,32 @@
 
         <parameter key="imagine.filter.loader.chain.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\ChainFilterLoader</parameter>
 
+        <parameter key="imagine.filter.loader.crop.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader</parameter>
+
+        <parameter key="imagine.filter.loader.optipng.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\OptipngFilterLoader</parameter>
+        <parameter key="imagine.filter.loader.canvas.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\CanvasFilterLoader</parameter>
+
     </parameters>
 
     <services>
-        
+
         <!-- Utility services -->
 
-        <service id="imagine.cache.path.resolver" class="%imagine.cache.path.resolver.class%">
-            <argument>%imagine.web_root%</argument>
+        <service id="imagine.param.resolver" class="%imagine.param.resolver.class%">
+            <argument>%imagine.hosts%</argument>
             <argument type="service" id="router" />
+            <argument type="service" id="router.request_context" on-invalid="null" strict="false" />
+            <argument type="service" id="templating.helper.assets" on-invalid="null" strict="false" />
+        </service>
+
+        <service id="imagine.cache.path.resolver" class="%imagine.cache.path.resolver.class%">
+            <argument type="service" id="imagine.filter.manager" />
+            <argument type="service" id="imagine.param.resolver" />
+            <argument type="service" id="router" />
+            <argument>%imagine.source_root%</argument>
+            <argument type="service" id="router.request_context" on-invalid="null" strict="false" />
+            <argument type="service" id="templating.helper.assets" on-invalid="null" strict="false" />
+            <argument>%imagine.default_front_controller%</argument>
         </service>
 
         <service id="imagine.cache.manager" class="%imagine.cache.manager.class%">
@@ -65,12 +86,19 @@
             <argument type="service" id="imagine" />
             <argument type="service" id="imagine.filter.manager" />
             <argument type="service" id="filesystem" />
-            <argument>%imagine.web_root%</argument>
-            <argument>%imagine.source_root%</argument>
+            <argument type="service" id="imagine.param.resolver" />
+            <argument>%imagine.permissions%</argument>
+            <argument>%imagine.default_quality%</argument>
         </service>
 
         <service id="imagine.filter.manager" class="%imagine.filter.manager.class%">
             <argument>%imagine.filters%</argument>
+        </service>
+
+        <service id="imagine.cache.reloader" class="%imagine.cache.reloader.class%">
+            <argument>%imagine.source_root%</argument>
+            <argument type="service" id="imagine.cache.manager" />
+            <argument type="service" id="imagine.filter.manager" />
         </service>
 
         <!-- Controller -->
@@ -79,6 +107,9 @@
             <argument type="service" id="imagine" />
             <argument type="service" id="imagine.cache.manager" />
             <argument type="service" id="imagine.filter.manager" />
+			<call method="setNotFoundImages">
+				<argument>%imagine.not_found_images%</argument>
+			</call>
 			<call method="setRequest">
 				<argument type="service" id="request" on-invalid="null" strict="false" />
 			</call>
@@ -88,13 +119,13 @@
 
         <service id="imagine.routing.loader" class="%imagine.routing.loader.class%">
             <tag name="routing.loader" />
-            <argument>%imagine.cache_prefix%</argument>
+            <argument type="service" id="imagine.param.resolver" />
             <argument>%imagine.filters%</argument>
         </service>
 
         <!-- ImagineInterface instances -->
-        
-        <service id="imagine" alias="imagine.gd" /> 
+
+        <service id="imagine" alias="imagine.gd" />
 
         <service id="imagine.gd" class="%imagine.gd.class%" />
 
@@ -106,12 +137,16 @@
 
         <service id="imagine.twig.extension" class="%imagine.twig.extension.class%" public="false">
             <tag name="twig.extension" />
-            <argument type="service" id="imagine.cache.path.resolver" />
+            <argument type="service" id="service_container" />
+            <argument>%imagine.on_the_fly%</argument>
+            <argument>%imagine.not_found_images%</argument>
         </service>
 
         <service id="imagine.templating.helper" class="%imagine.templating.helper.class%">
             <tag name="templating.helper" alias="imagine" />
-            <argument type="service" id="imagine.cache.path.resolver" />
+            <argument type="service" id="service_container" />
+            <argument>%imagine.on_the_fly%</argument>
+            <argument>%imagine.not_found_images%</argument>
         </service>
 
         <!-- Filter loaders -->
@@ -136,6 +171,20 @@
         <service id="imagine.filter.loader.chain" class="%imagine.filter.loader.chain.class%">
             <argument type="service" id="imagine.filter.manager" />
             <tag name="imagine.filter.loader" filter="chain" />
+        </service>
+
+        <service id="imagine.filter.loader.crop" class="%imagine.filter.loader.crop.class%">
+            <tag name="imagine.filter.loader" filter="crop" />
+        </service>
+
+        <service id="imagine.filter.loader.optipng" class="%imagine.filter.loader.optipng.class%">
+            <argument type="service" id="imagine" />
+            <tag name="imagine.filter.loader" filter="optipng" />
+        </service>
+
+        <service id="imagine.filter.loader.canvas" class="%imagine.filter.loader.canvas.class%">
+            <argument type="service" id="imagine" />
+            <tag name="imagine.filter.loader" filter="canvas" />
         </service>
 
     </services>

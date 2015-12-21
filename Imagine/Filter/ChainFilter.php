@@ -1,28 +1,38 @@
 <?php
+
 namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter;
 
+use Imagine\Exception\InvalidArgumentException;
 use Imagine\Filter\FilterInterface;
 use Imagine\Image\ImageInterface;
-use InvalidArgumentException;
 
 class ChainFilter implements FilterInterface
 {
-
     /**
-     * @var \Imagine\Filter\FilterInterface[]
+     * @var FilterInterface[]
      */
     protected $filters;
 
     /**
-     * @param \Imagine\Filter\FilterInterface[] $filters
+     * @param FilterInterface[] $filters
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(array $filters)
     {
+        $final = null;
         foreach ($filters as $filter) {
-            if (false == ($filter instanceof FilterInterface)) {
+            if ($final) {
+                $message = sprintf('Instance of %s must be used as last filter only', $final);
+                throw new InvalidArgumentException($message);
+            }
+
+            if (!$filter instanceof FilterInterface) {
                 throw new InvalidArgumentException('Instance of Imagine\\Filter\\FilterInterface expected');
+            }
+
+            if ($filter instanceof FinalFilterInterface) {
+                $final = get_class($filter);
             }
         }
 
@@ -34,7 +44,6 @@ class ChainFilter implements FilterInterface
      */
     public function apply(ImageInterface $image)
     {
-        /** @var $filter \Imagine\Filter\FilterInterface */
         foreach ($this->filters as $filter) {
             $image = $filter->apply($image);
         }

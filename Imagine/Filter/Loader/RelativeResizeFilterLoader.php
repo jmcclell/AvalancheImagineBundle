@@ -7,9 +7,6 @@ use Imagine\Filter\Advanced\RelativeResize;
 
 class RelativeResizeFilterLoader implements LoaderInterface
 {
-    /**
-     * @see Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\LoaderInterface::load()
-     */
     public function load(array $options = array())
     {
         foreach ($options as $method => $parameter) {

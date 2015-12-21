@@ -1,11 +1,13 @@
 <?php
+
 namespace Avalanche\Bundle\ImagineBundle\Tests\Imagine\Filter;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\PasteFilter;
-use Imagine\Image\Point;
 use Imagine\Image\Box;
+use Imagine\Image\Point;
+use PHPUnit_Framework_TestCase;
 
-class PasteFilterTest extends \PHPUnit_Framework_TestCase
+class PasteFilterTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -89,8 +91,7 @@ class PasteFilterTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('paste')
             ->with($pasteImage, new Point(5, 9))
-            ->will($this->returnValue($expectedImage))
-        ;
+            ->will($this->returnValue($expectedImage));
 
         $filter = new PasteFilter($pasteImage, 5, 9);
 
@@ -107,19 +108,16 @@ class PasteFilterTest extends \PHPUnit_Framework_TestCase
         $pasteImage = $this->createImageMock();
         $pasteImage
             ->expects($this->never())
-            ->method('getSize')
-        ;
+            ->method('getSize');
 
         $image = $this->createImageMock();
         $image
             ->expects($this->once())
             ->method('paste')
-            ->with($pasteImage, new Point(0, 10))
-        ;
+            ->with($pasteImage, new Point(0, 10));
         $image
             ->expects($this->never())
-            ->method('getSize')
-        ;
+            ->method('getSize');
 
         $filter = new PasteFilter($pasteImage, 'left', 10);
 
@@ -135,20 +133,17 @@ class PasteFilterTest extends \PHPUnit_Framework_TestCase
         $pasteImage
             ->expects($this->once())
             ->method('getSize')
-            ->will($this->returnValue(new Box(10, 10)))
-        ;
+            ->will($this->returnValue(new Box(10, 10)));
 
         $image = $this->createImageMock();
         $image
             ->expects($this->once())
             ->method('paste')
-            ->with($pasteImage, new Point(100 - 10, 10))
-        ;
+            ->with($pasteImage, new Point(100 - 10, 10));
         $image
             ->expects($this->once())
             ->method('getSize')
-            ->will($this->returnValue(new Box(100, 100)))
-        ;
+            ->will($this->returnValue(new Box(100, 100)));
 
         $filter = new PasteFilter($pasteImage, 'right', 10);
 
@@ -164,20 +159,17 @@ class PasteFilterTest extends \PHPUnit_Framework_TestCase
         $pasteImage
             ->expects($this->once())
             ->method('getSize')
-            ->will($this->returnValue(new Box(10, 10)))
-        ;
+            ->will($this->returnValue(new Box(10, 10)));
 
         $image = $this->createImageMock();
         $image
             ->expects($this->once())
             ->method('paste')
-            ->with($pasteImage, new Point((100 / 2) - (10 / 2), 10))
-        ;
+            ->with($pasteImage, new Point((100 / 2) - (10 / 2), 10));
         $image
             ->expects($this->once())
             ->method('getSize')
-            ->will($this->returnValue(new Box(100, 100)))
-        ;
+            ->will($this->returnValue(new Box(100, 100)));
 
         $filter = new PasteFilter($pasteImage, 'center', 10);
 
@@ -192,19 +184,16 @@ class PasteFilterTest extends \PHPUnit_Framework_TestCase
         $pasteImage = $this->createImageMock();
         $pasteImage
             ->expects($this->never())
-            ->method('getSize')
-        ;
+            ->method('getSize');
 
         $image = $this->createImageMock();
         $image
             ->expects($this->once())
             ->method('paste')
-            ->with($pasteImage, new Point(0, 0))
-        ;
+            ->with($pasteImage, new Point(0, 0));
         $image
             ->expects($this->never())
-            ->method('getSize')
-        ;
+            ->method('getSize');
 
         $filter = new PasteFilter($pasteImage, 0, 'top');
 
@@ -220,20 +209,17 @@ class PasteFilterTest extends \PHPUnit_Framework_TestCase
         $pasteImage
             ->expects($this->once())
             ->method('getSize')
-            ->will($this->returnValue(new Box(10, 10)))
-        ;
+            ->will($this->returnValue(new Box(10, 10)));
 
         $image = $this->createImageMock();
         $image
             ->expects($this->once())
             ->method('paste')
-            ->with($pasteImage, new Point(0, 100 - 10))
-        ;
+            ->with($pasteImage, new Point(0, 100 - 10));
         $image
             ->expects($this->once())
             ->method('getSize')
-            ->will($this->returnValue(new Box(100, 100)))
-        ;
+            ->will($this->returnValue(new Box(100, 100)));
 
         $filter = new PasteFilter($pasteImage, 0, 'bottom');
 
@@ -249,20 +235,17 @@ class PasteFilterTest extends \PHPUnit_Framework_TestCase
         $pasteImage
             ->expects($this->once())
             ->method('getSize')
-            ->will($this->returnValue(new Box(10, 10)))
-        ;
+            ->will($this->returnValue(new Box(10, 10)));
 
         $image = $this->createImageMock();
         $image
             ->expects($this->once())
             ->method('paste')
-            ->with($pasteImage, new Point(0, (100 / 2) - (10 / 2)))
-        ;
+            ->with($pasteImage, new Point(0, (100 / 2) - (10 / 2)));
         $image
             ->expects($this->once())
             ->method('getSize')
-            ->will($this->returnValue(new Box(100, 100)))
-        ;
+            ->will($this->returnValue(new Box(100, 100)));
 
         $filter = new PasteFilter($pasteImage, 0, 'middle');
 

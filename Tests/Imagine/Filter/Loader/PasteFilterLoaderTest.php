@@ -1,10 +1,12 @@
 <?php
+
 namespace Avalanche\Bundle\ImagineBundle\Tests\Imagine\Filter\Loader;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\PasteFilterLoader;
 use Makasim\File\TempFile;
+use PHPUnit_Framework_TestCase;
 
-class PasteFilterLoaderTest extends \PHPUnit_Framework_TestCase
+class PasteFilterLoaderTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -49,8 +51,7 @@ class PasteFilterLoaderTest extends \PHPUnit_Framework_TestCase
         $imagine
             ->expects($this->once())
             ->method('open')
-            ->will($this->returnValue($this->createImageMock()))
-        ;
+            ->will($this->returnValue($this->createImageMock()));
 
         $loader = new PasteFilterLoader($imagine);
 

@@ -1,19 +1,18 @@
 <?php
+
 namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader;
 
-use Imagine\Image\ImagineInterface;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\PasteFilter;
+use Imagine\Exception\InvalidArgumentException;
+use Imagine\Image\ImagineInterface;
 
 class PasteFilterLoader implements LoaderInterface
 {
     /**
-     * @var \Imagine\Image\ImagineInterface
+     * @var ImagineInterface
      */
     protected $imagine;
 
-    /**
-     * @param \Imagine\Image\ImagineInterface $imagine
-     */
     public function __construct(ImagineInterface $imagine)
     {
         $this->imagine = $imagine;
@@ -21,15 +20,17 @@ class PasteFilterLoader implements LoaderInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @throws InvalidArgumentException
      */
     function load(array $options = array())
     {
-        if (false == isset($options['image'])) {
-            throw new \InvalidArgumentException('Option "image" is required.');
+        if (!isset($options['image'])) {
+            throw new InvalidArgumentException('Option "image" is required.');
         }
 
-        if (false == is_readable($options['image'])) {
-            throw new \InvalidArgumentException('Expected image file exists and readable.');
+        if (!is_readable($options['image'])) {
+            throw new InvalidArgumentException('Expected image file exists and readable.');
         }
 
         $x = isset($options['x']) ? $options['x'] : 0;

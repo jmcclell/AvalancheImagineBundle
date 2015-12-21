@@ -1,11 +1,13 @@
 <?php
+
 namespace Avalanche\Bundle\ImagineBundle\Tests\Imagine\Filter\Loader;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\ChainFilterLoader;
-use Symfony\Component\DependencyInjection\Container;
 use Avalanche\Bundle\ImagineBundle\Tests\Imagine\Filter\Loader\Files\Filter;
+use PHPUnit_Framework_TestCase;
+use Symfony\Component\DependencyInjection\Container;
 
-class ChainFilterLoaderTest extends \PHPUnit_Framework_TestCase
+class ChainFilterLoaderTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -65,15 +67,13 @@ class ChainFilterLoaderTest extends \PHPUnit_Framework_TestCase
         $filterLoader1
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(new Filter()))
-        ;
+            ->will($this->returnValue(new Filter()));
 
         $filterLoader2 = $this->createFilterLoaderMock();
         $filterLoader2
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(new Filter()))
-        ;
+            ->will($this->returnValue(new Filter()));
 
         $container = new Container();
         $container->set('filter1', $filterLoader1);

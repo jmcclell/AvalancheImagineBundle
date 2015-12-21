@@ -1,8 +1,8 @@
 {
-    "name": "avalanche123/imagine-bundle",
+    "name": "snpy/imagine-bundle",
     "description": "Image manipulation using Imagine and Twig Filters.",
     "keywords": ["image manipulation", "imagine"],
-    "homepage": "https://github.com/avalanche123/AvalancheImagineBundle",
+    "homepage": "https://github.com/snpy/AvalancheImagineBundle",
     "type": "symfony-bundle",
     "license": "MIT",
     "repositories":[
@@ -20,14 +20,15 @@
         }
     ],
     "require": {
-        "symfony/framework-bundle": "2.*",
-        "imagine/Imagine": "v0.4.1"
+        "symfony/framework-bundle": "~2.0||~3.0",
+        "imagine/Imagine": "~0.5"
     },
     "require-dev": {
         "makasim/temp-file": "dev-master"
     },
     "suggest": {
-        "symfony/twig-bundle": "2.*"
+        "kriswallsmith/assetic": "Allows to use Assetic optipng filter (soon more too come)",
+        "symfony/twig-bundle": "~2.0||~3.0"
     },
     "autoload": {
         "psr-0": { "Avalanche\\Bundle\\ImagineBundle": "" }

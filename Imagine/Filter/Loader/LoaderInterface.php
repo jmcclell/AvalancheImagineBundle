@@ -7,7 +7,7 @@ interface LoaderInterface
     /**
      * @param array $options
      *
-     * @return Imagine\Filter\FilterInterface
+     * @return \Imagine\Filter\FilterInterface
      */
     function load(array $options = array());
 }

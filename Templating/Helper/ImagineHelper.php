@@ -2,46 +2,64 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Templating\Helper;
 
-use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Templating\Helper\Helper;
 
 class ImagineHelper extends Helper
 {
-    /**
-     * @var Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver
-     */
+    /** @var ContainerInterface */
+    private $container;
     private $cachePathResolver;
+    /** @var boolean */
+    private $onTheFly;
+    /** @var string[] */
+    private $notFoundImages;
 
-    /**
-     * Constructs by setting $cachePathResolver
-     *
-     * @param Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver $cachePathResolver
-     */
-    public function __construct(CachePathResolver $cachePathResolver)
+    public function __construct(ContainerInterface $container, $onTheFly = true, array $notFoundImages = [])
     {
-        $this->cachePathResolver = $cachePathResolver;
+        $this->container      = $container;
+        $this->onTheFly       = $onTheFly;
+        $this->notFoundImages = $notFoundImages;
     }
 
     /**
      * Gets cache path of an image to be filtered
      *
-     * @param string $path
-     * @param string $filter
+     * @param string  $path
+     * @param string  $filter
      * @param boolean $absolute
-     * 
+     *
      * @return string
      */
     public function filter($path, $filter, $absolute = false)
     {
-        return $this->cachePathResolver->getBrowserPath($path, $filter, $absolute);
+        $uri = $this->useController()
+            ? $this->getCachePathResolver()->getBrowserPath($path, $filter, $absolute)
+            : $this->getCachePathResolver()->getCachedUri($path, $filter, $absolute);
+
+        return $uri ? : $this->findNotFound($filter);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see Symfony\Component\Templating\Helper.HelperInterface::getName()
-     */
+    /** @return \Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver */
+    protected function getCachePathResolver()
+    {
+        return $this->cachePathResolver
+            ?: ($this->cachePathResolver = $this->container->get('imagine.cache.path.resolver'));
+    }
+
+    /** (non-PHPdoc) */
     public function getName()
     {
         return 'imagine';
+    }
+
+    protected function useController()
+    {
+        return $this->onTheFly;
+    }
+
+    protected function findNotFound($filter)
+    {
+        return isset($this->notFoundImages[$filter]) ? $this->notFoundImages[$filter] : null;
     }
 }

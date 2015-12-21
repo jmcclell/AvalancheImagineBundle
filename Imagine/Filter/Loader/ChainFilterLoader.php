@@ -1,19 +1,18 @@
 <?php
+
 namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader;
 
-use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\ChainFilter;
+use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
+use Imagine\Exception\InvalidArgumentException;
 
 class ChainFilterLoader implements LoaderInterface
 {
     /**
-     * @var \Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager
+     * @var FilterManager
      */
     protected $filterManager;
 
-    /**
-     * @param \Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager $filterManager
-     */
     public function __construct(FilterManager $filterManager)
     {
         $this->filterManager = $filterManager;
@@ -24,23 +23,15 @@ class ChainFilterLoader implements LoaderInterface
      */
     function load(array $options = array())
     {
-        if (false == isset($options['filters']) || false == is_array($options['filters'])) {
-            throw new \InvalidArgumentException('Expected filters key and type of array');
-        }
-
-        if (false == $options['filters']) {
-            throw new \InvalidArgumentException('At least one filter expected');
+        if (!isset($options['filters']) || !is_array($options['filters'])) {
+            throw new InvalidArgumentException('Expected filters key and type of array');
         }
 
         $filters = array();
 
-        foreach ($options['filters'] as $loaderName => $loaderOptions) {
-
-            $loader = $this->filterManager->getLoader($loaderName);
-
-            $loaderOptions = is_array($loaderOptions) ? $loaderOptions : array();
-
-            $filters[] = $loader->load($loaderOptions);
+        foreach ($options['filters'] as $loaderName => $opts) {
+            $filters[] = $this->filterManager->getLoader($loaderName)
+                ->load(is_array($opts) ? $opts : []);
         }
 
         return new ChainFilter($filters);

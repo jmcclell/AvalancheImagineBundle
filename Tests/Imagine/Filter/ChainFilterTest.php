@@ -1,9 +1,11 @@
 <?php
+
 namespace Avalanche\Bundle\ImagineBundle\Tests\Imagine\Filter;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\ChainFilter;
+use PHPUnit_Framework_TestCase;
 
-class ChainFilterTest extends \PHPUnit_Framework_TestCase
+class ChainFilterTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -35,16 +37,14 @@ class ChainFilterTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('apply')
             ->with($image)
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
         $filter2 = $this->createFilterMock();
         $filter2
             ->expects($this->once())
             ->method('apply')
             ->with($image)
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
         $chainFilter = new ChainFilter(array(
             $filter1,

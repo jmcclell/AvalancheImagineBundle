@@ -2,47 +2,40 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Controller;
 
+use Avalanche\Bundle\ImagineBundle\Imagine\CacheManager;
+use Avalanche\Bundle\ImagineBundle\Imagine\ImageFile;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
+use DateTime;
+use Exception;
+use Imagine\Exception\RuntimeException;
 use Imagine\Image\ImagineInterface;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Avalanche\Bundle\ImagineBundle\Imagine\CacheManager;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class ImagineController
 {
-    /**
-     * @var Request
-     */
+    /** @var Request */
     private $request;
 
-    /**
-     * @var ImagineInterface
-     */
+    /** @var ImagineInterface */
     private $imagine;
 
-    /**
-     * @var CacheManager
-     */
+    /** @var CacheManager */
     private $cacheManager;
 
-    /**
-     * @var Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager
-     */
+    /** @var FilterManager */
     private $filterManager;
 
-    /**
-     * Constructs by setting $cachePathResolver
-     *
-     * @param Request          $request
-     * @param ImagineInterface $imagine
-     * @param CacheManager     $cacheManager
-     * @param FilterManager    $filterManager
-     */
+    /** @var array */
+    private $notFoundImages;
+
     public function __construct(ImagineInterface $imagine, CacheManager $cacheManager, FilterManager $filterManager)
     {
-        $this->imagine = $imagine;
-        $this->cacheManager = $cacheManager;
+        $this->imagine       = $imagine;
+        $this->cacheManager  = $cacheManager;
         $this->filterManager = $filterManager;
     }
 
@@ -54,65 +47,82 @@ class ImagineController
      * @param string $filter
      *
      * @return Response
+     *
+     * @throws Exception
      */
-    public function filter($path, $filter)
+    public function filterAction($path, $filter)
     {
-        $cachedPath = $this->cacheManager->cacheImage($this->request->getBaseUrl(), $path, $filter);
-        
-         // if cache path cannot be determined, return 404
+        $baseUrl = $this->request->getBaseUrl();
+
+        try {
+            try {
+                $cachedPath = $this->cacheManager->cacheImage($baseUrl, $path, $filter);
+            } catch (RuntimeException $e) {
+                if (!isset($this->notFoundImages[$filter])) {
+                    throw $e;
+                }
+
+                $path       = $this->notFoundImages[$filter];
+                $cachedPath = $this->cacheManager->cacheImage($baseUrl, $path, $filter);
+            }
+        } catch (RouteNotFoundException $e) {
+            throw new NotFoundHttpException('Filter doesn\'t exist.');
+        }
+
+        // if cache path cannot be determined, return 404
         if (null === $cachedPath) {
             throw new NotFoundHttpException('Image doesn\'t exist');
         }
 
-        ob_start();
         try {
-            $format  = $this->filterManager->getOption($filter, "format", "png");
-
-            $this->imagine->open($cachedPath)->show($format);
-
-            $type    = 'image/' . $format;
-            $length  = ob_get_length();
-            $content = ob_get_clean();
+            // Using File instead of Imagine::open(), because i.e. image/x-icon is not widely supported.
+            $file = new ImageFile($cachedPath, false);
 
             // TODO: add more media headers
-            $response = new Response($content, 201, array(
-                'content-type'   => $type,
-                'content-length' => $length,
-            ));
+            $headers  = ['content-type' => $file->getMimeType(), 'content-length' => $file->getSize()];
+            $response = new Response($file->getContents(), 201, $headers);
 
             // Cache
-            $cacheType = $this->filterManager->getOption($filter, "cache_type", false);
-            if (false == $cacheType) {
+            if (!$cacheType = $this->filterManager->getOption($filter, 'cache_type', false)) {
                 return $response;
             }
 
-            ($cacheType === "public") ? $response->setPublic() : $response->setPrivate();
+            ($cacheType === 'public') ? $response->setPublic() : $response->setPrivate();
 
-            $cacheExpires = $this->filterManager->getOption($filter, "cache_expires", "1 day");
-            $expirationDate = new \DateTime("+" . $cacheExpires);
-            $maxAge = $expirationDate->format("U") - time();
+            $cacheExpires   = $this->filterManager->getOption($filter, 'cache_expires', '1 day');
+            $expirationDate = new DateTime('+' . $cacheExpires);
+            $maxAge         = $expirationDate->format('U') - time();
 
             if ($maxAge < 0) {
-                throw new \InvalidArgumentException("Invalid cache expiration date");
+                throw new InvalidArgumentException('Invalid cache expiration date');
             }
 
             $response->setExpires($expirationDate);
             $response->setMaxAge($maxAge);
 
             return $response;
-        } catch (\Exception $e) {
-            ob_end_clean();
+        } catch (Exception $e) {
             throw $e;
         }
     }
 
-	/**
-	 * Set the request
-	 *
-	 * @param Request $request
-	 */
-	public function setRequest(Request $request = null)
-	{
-		$this->request = $request;
-	}
+    /**
+     * Set the request
+     *
+     * @param Request $request
+     */
+    public function setRequest(Request $request = null)
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * Set the notFoundImage
+     *
+     * @param array $notFoundImages
+     */
+    public function setNotFoundImages(array $notFoundImages)
+    {
+        $this->notFoundImages = $notFoundImages;
+    }
 }
